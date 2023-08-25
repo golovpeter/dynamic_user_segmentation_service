@@ -13,7 +13,7 @@ CREATE TABLE users_to_segments
     CONSTRAINT unique_user_segment UNIQUE (user_id, segment_id)
 );
 
-CREATE TYPE operation AS ENUM ('create', 'delete')
+CREATE TYPE operation AS ENUM ('create', 'delete');
 
 CREATE TABLE users_to_segments_history
 (
