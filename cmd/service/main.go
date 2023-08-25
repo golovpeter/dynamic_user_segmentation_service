@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/golovpeter/avito-trainee-task-2023/internal/handler/delete_segment"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golovpeter/avito-trainee-task-2023/internal/config"
@@ -48,6 +49,7 @@ func main() {
 
 	router := gin.Default()
 	router.POST("api/v1/segment/create", create_segment.NewHandler(logger, db).CreateSegment)
+	router.POST("api/v1/segment/delete", delete_segment.NewHandler(logger, db).DeleteSegment)
 
 	if err = router.Run(fmt.Sprintf(":%d", cfg.Server.Port)); err != nil {
 		logger.WithError(err).Error("server error occurred")
