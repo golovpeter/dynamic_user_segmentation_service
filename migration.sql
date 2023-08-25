@@ -3,7 +3,8 @@ CREATE TABLE segments
     id         BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     slug       VARCHAR(256) UNIQUE      NOT NULL,
     deleted    BOOLEAN                  NOT NULL DEFAULT FALSE,
-    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+    updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
 );
 
 CREATE TABLE users_to_segments

@@ -12,7 +12,8 @@ func NewDbSegment(conn *sqlx.DB) *DbSegments {
 	}
 }
 
-const createSegmentQuery = `INSERT INTO segments(slug) VALUES ($1) ON CONFLICT (slug) DO NOTHING`
+const createSegmentQuery = `INSERT INTO segments(slug) VALUES ($1) 
+                           ON CONFLICT (slug) DO UPDATE SET deleted = false, updated_at = now()`
 
 func (d *DbSegments) CreateSegment(slug string) error {
 	_, err := d.conn.Exec(createSegmentQuery, slug)

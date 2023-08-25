@@ -6,7 +6,7 @@ import (
 	"unicode/utf8"
 
 	"github.com/gin-gonic/gin"
-	"github.com/golovpeter/avito-trainee-task-2023/internal/dto/create_segment"
+	"github.com/golovpeter/avito-trainee-task-2023/internal/dto/create_segment_dto"
 	"github.com/golovpeter/avito-trainee-task-2023/internal/repository/segments"
 	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
@@ -25,7 +25,7 @@ func NewHandler(log *logrus.Logger, conn *sqlx.DB) *handler {
 }
 
 func (h *handler) CreateSegment(c *gin.Context) {
-	var in create_segment.CreateSegmentIn
+	var in create_segment_dto.CreateSegmentIn
 
 	if err := c.BindJSON(&in); err != nil {
 		h.log.WithError(err).Error("error binding JSON")
