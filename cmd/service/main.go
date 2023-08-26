@@ -14,7 +14,7 @@ import (
 	"github.com/golovpeter/avito-trainee-task-2023/internal/handler/get_user_segments"
 	"github.com/golovpeter/avito-trainee-task-2023/internal/repository/segments"
 	"github.com/golovpeter/avito-trainee-task-2023/internal/repository/user_segments"
-	"github.com/golovpeter/avito-trainee-task-2023/internal/service/change_user_segments_service"
+	change_user_segments_service "github.com/golovpeter/avito-trainee-task-2023/internal/service/change_user_segments"
 	create_segment_service "github.com/golovpeter/avito-trainee-task-2023/internal/service/create_segment"
 	delete_segment_service "github.com/golovpeter/avito-trainee-task-2023/internal/service/delete_segment"
 	get_user_segments_service "github.com/golovpeter/avito-trainee-task-2023/internal/service/get_user_segments"

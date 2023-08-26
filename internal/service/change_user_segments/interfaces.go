@@ -1,4 +1,4 @@
-package change_user_segments_service
+package change_user_segments
 
 type ChangeUserSegmentsService interface {
 	ChangeUserSegments(data *ChangeUserSegmentsData) error

@@ -3,18 +3,18 @@ package change_user_segments
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/golovpeter/avito-trainee-task-2023/internal/common"
-	"github.com/golovpeter/avito-trainee-task-2023/internal/service/change_user_segments_service"
+	"github.com/golovpeter/avito-trainee-task-2023/internal/service/change_user_segments"
 	"github.com/sirupsen/logrus"
 	"net/http"
 )
 
 type handler struct {
-	service change_user_segments_service.ChangeUserSegmentsService
+	service change_user_segments.ChangeUserSegmentsService
 	log     *logrus.Logger
 }
 
 func NewHandler(
-	service change_user_segments_service.ChangeUserSegmentsService,
+	service change_user_segments.ChangeUserSegmentsService,
 	log *logrus.Logger,
 ) *handler {
 	return &handler{
@@ -43,7 +43,7 @@ func (h *handler) ChangeUserSegments(c *gin.Context) {
 		return
 	}
 
-	err := h.service.ChangeUserSegments(&change_user_segments_service.ChangeUserSegmentsData{
+	err := h.service.ChangeUserSegments(&change_user_segments.ChangeUserSegmentsData{
 		AddSegments:    in.AddSegments,
 		DeleteSegments: in.DeleteSegments,
 		UserID:         in.UserID,
@@ -51,7 +51,7 @@ func (h *handler) ChangeUserSegments(c *gin.Context) {
 
 	if err != nil {
 		switch err := err.(type) {
-		case change_user_segments_service.ErrorSegmentsNotFound:
+		case change_user_segments.ErrorSegmentsNotFound:
 			h.log.Warn(err.Error())
 			c.JSON(http.StatusBadRequest, common.ErrorOut{
 				ErrorMessage: err.Error(),

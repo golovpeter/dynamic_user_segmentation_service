@@ -36,7 +36,7 @@ func (h *handler) DeleteSegment(c *gin.Context) {
 		return
 	}
 
-	err := h.service.DeleteSegmentService(&delete_segment.DeleteSegmentData{
+	err := h.service.DeleteSegment(&delete_segment.DeleteSegmentData{
 		SegmentSlug: in.SegmentSlug,
 	})
 

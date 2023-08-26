@@ -14,7 +14,7 @@ func NewService(
 	}
 }
 
-func (s *service) DeleteSegmentService(data *DeleteSegmentData) error {
+func (s *service) DeleteSegment(data *DeleteSegmentData) error {
 	rowsAffected, err := s.repository.DeleteSegment(data.SegmentSlug)
 	if err != nil {
 		return err

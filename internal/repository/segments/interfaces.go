@@ -1,5 +1,7 @@
 package segments
 
+//go:generate mockgen -destination=mocks.go -package=$GOPACKAGE -source=interfaces.go
+
 type Repository interface {
 	CreateSegment(slug string) error
 	DeleteSegment(slug string) (int64, error)

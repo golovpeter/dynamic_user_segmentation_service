@@ -1,4 +1,4 @@
-package change_user_segments_service
+package change_user_segments
 
 import (
 	"github.com/golovpeter/avito-trainee-task-2023/internal/repository/segments"
