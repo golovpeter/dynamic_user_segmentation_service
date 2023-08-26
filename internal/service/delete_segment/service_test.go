@@ -29,7 +29,7 @@ func (ts *TestSuite) SetupTest() {
 	ts.service = NewService(ts.mockSegmentsRepository)
 }
 
-func TestExampleTestSuite(t *testing.T) {
+func TestRunSuite(t *testing.T) {
 	suite.Run(t, new(TestSuite))
 }
 
@@ -39,7 +39,7 @@ func (ts *TestSuite) Test_DeleteSegment_Success() {
 	ts.mockSegmentsRepository.EXPECT().
 		DeleteSegment(testSlug).
 		Times(1).
-		Return(int64(1), nil)
+		Return(true, nil)
 
 	err := ts.service.DeleteSegment(&DeleteSegmentData{
 		SegmentSlug: testSlug,
@@ -52,7 +52,7 @@ func (ts *TestSuite) Test_DeleteSegment_ErrorSegmentNotFound() {
 	ts.mockSegmentsRepository.EXPECT().
 		DeleteSegment(testSlug).
 		Times(1).
-		Return(int64(0), nil)
+		Return(false, nil)
 
 	err := ts.service.DeleteSegment(&DeleteSegmentData{
 		SegmentSlug: testSlug,
@@ -65,7 +65,7 @@ func (ts *TestSuite) Test_DeleteSegment_OtherError() {
 	ts.mockSegmentsRepository.EXPECT().
 		DeleteSegment(testSlug).
 		Times(1).
-		Return(int64(0), errors.New("repository error"))
+		Return(false, errors.New("repository error"))
 
 	err := ts.service.DeleteSegment(&DeleteSegmentData{
 		SegmentSlug: testSlug,

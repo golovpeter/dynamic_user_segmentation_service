@@ -27,7 +27,7 @@ func NewHandler(
 func (h *handler) GetUserSegments(c *gin.Context) {
 	userIdParam := c.Param("user_id")
 
-	userId, err := strconv.Atoi(userIdParam)
+	userId, err := strconv.ParseInt(userIdParam, 10, 64)
 	if err != nil {
 		h.log.WithError(err).Warn("invalid user id")
 		c.JSON(http.StatusBadRequest, common.ErrorOut{
@@ -38,7 +38,7 @@ func (h *handler) GetUserSegments(c *gin.Context) {
 
 	userSegments, err := h.service.GetUserSegments(
 		&get_user_segments.GetUserSegmentsData{
-			UserID: int64(userId),
+			UserId: userId,
 		})
 
 	if err != nil {

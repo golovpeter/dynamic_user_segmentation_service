@@ -35,7 +35,7 @@ func (ts *TestSuite) SetupTest() {
 	)
 }
 
-func TestExampleTestSuite(t *testing.T) {
+func TestRunSuite(t *testing.T) {
 	suite.Run(t, new(TestSuite))
 }
 

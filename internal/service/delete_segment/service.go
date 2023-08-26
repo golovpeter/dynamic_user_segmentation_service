@@ -15,12 +15,12 @@ func NewService(
 }
 
 func (s *service) DeleteSegment(data *DeleteSegmentData) error {
-	rowsAffected, err := s.repository.DeleteSegment(data.SegmentSlug)
+	deleted, err := s.repository.DeleteSegment(data.SegmentSlug)
 	if err != nil {
 		return err
 	}
 
-	if rowsAffected == 0 {
+	if !deleted {
 		return ErrSegmentNotFound
 	}
 

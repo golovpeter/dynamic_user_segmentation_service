@@ -29,7 +29,7 @@ func (ts *TestSuite) SetupTest() {
 	ts.service = NewService(ts.mockSegmentsRepository)
 }
 
-func TestExampleTestSuite(t *testing.T) {
+func TestRunSuite(t *testing.T) {
 	suite.Run(t, new(TestSuite))
 }
 

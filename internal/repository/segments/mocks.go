@@ -48,10 +48,10 @@ func (mr *MockRepositoryMockRecorder) CreateSegment(slug interface{}) *gomock.Ca
 }
 
 // DeleteSegment mocks base method.
-func (m *MockRepository) DeleteSegment(slug string) (int64, error) {
+func (m *MockRepository) DeleteSegment(slug string) (bool, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DeleteSegment", slug)
-	ret0, _ := ret[0].(int64)
+	ret0, _ := ret[0].(bool)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

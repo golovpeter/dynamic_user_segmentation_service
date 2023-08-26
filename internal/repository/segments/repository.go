@@ -43,35 +43,35 @@ const deleteUserSegmentsQuery = `
 	WHERE segment_id = $1
 `
 
-func (s *repository) DeleteSegment(slug string) (int64, error) {
+func (s *repository) DeleteSegment(slug string) (bool, error) {
 	tx, err := s.conn.Begin()
 	if err != nil {
-		return 0, err
+		return false, err
 	}
 
 	var slugId int64
 	err = tx.QueryRow(deleteSegmentQuery, slug).Scan(&slugId)
 	if err != nil && !errors.Is(err, sql.ErrNoRows) {
-		return 0, err
+		return false, err
 	}
 
 	if slugId == 0 {
 		_ = tx.Rollback()
-		return 0, nil
+		return false, nil
 	}
 
 	_, err = tx.Exec(deleteUserSegmentsQuery, slugId)
 	if err != nil {
 		_ = tx.Rollback()
-		return 0, err
+		return false, err
 	}
 
 	err = tx.Commit()
 	if err != nil {
-		return 0, err
+		return false, err
 	}
 
-	return 1, nil
+	return true, nil
 }
 
 const getActiveSegmentsIdsBySlugsQuery = `
