@@ -1,6 +1,8 @@
 package segments
 
 import (
+	"database/sql"
+	"errors"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -32,16 +34,44 @@ func (s *repository) CreateSegment(slug string) error {
 
 const deleteSegmentQuery = `
 	UPDATE segments SET deleted = true, updated_at = now() 
-    WHERE slug = $1
+    WHERE slug = $1 AND deleted = false
+	RETURNING id
+`
+
+const deleteUserSegmentsQuery = `
+	DELETE FROM users_to_segments
+	WHERE segment_id = $1
 `
 
 func (s *repository) DeleteSegment(slug string) (int64, error) {
-	result, err := s.conn.Exec(deleteSegmentQuery, slug)
+	tx, err := s.conn.Begin()
 	if err != nil {
 		return 0, err
 	}
 
-	return result.RowsAffected()
+	var slugId int64
+	err = tx.QueryRow(deleteSegmentQuery, slug).Scan(&slugId)
+	if err != nil && !errors.Is(err, sql.ErrNoRows) {
+		return 0, err
+	}
+
+	if slugId == 0 {
+		_ = tx.Rollback()
+		return 0, nil
+	}
+
+	_, err = tx.Exec(deleteUserSegmentsQuery, slugId)
+	if err != nil {
+		_ = tx.Rollback()
+		return 0, err
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		return 0, err
+	}
+
+	return 1, nil
 }
 
 const getActiveSegmentsIdsBySlugsQuery = `

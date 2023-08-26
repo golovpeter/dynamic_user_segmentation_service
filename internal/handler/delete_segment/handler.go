@@ -36,10 +36,6 @@ func (h *handler) DeleteSegment(c *gin.Context) {
 		return
 	}
 
-	err := h.service.DeleteSegment(&delete_segment.DeleteSegmentData{
-		SegmentSlug: in.SegmentSlug,
-	})
-
 	isValid, errMessage, err := validateInParams(in.SegmentSlug)
 
 	if err != nil {
@@ -57,6 +53,10 @@ func (h *handler) DeleteSegment(c *gin.Context) {
 		})
 		return
 	}
+
+	err = h.service.DeleteSegment(&delete_segment.DeleteSegmentData{
+		SegmentSlug: in.SegmentSlug,
+	})
 
 	if err != nil {
 		switch {

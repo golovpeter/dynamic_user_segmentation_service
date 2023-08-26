@@ -5,7 +5,7 @@ import (
 	"unicode/utf8"
 )
 
-const slugValidPattern = `^[A-Z_]+$`
+const slugValidPattern = `^[A-Z_0-9]+$`
 
 func ValidateSlug(slug string) (bool, string, error) {
 	if utf8.RuneCountInString(slug) > 256 {
