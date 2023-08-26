@@ -2,14 +2,20 @@ package main
 
 import (
 	"fmt"
-	"github.com/golovpeter/avito-trainee-task-2023/internal/handler/delete_segment"
 
 	"github.com/gin-gonic/gin"
-	"github.com/golovpeter/avito-trainee-task-2023/internal/config"
-	"github.com/golovpeter/avito-trainee-task-2023/internal/handler/create_segment"
-	_ "github.com/jackc/pgx/v5/stdlib"
-	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
+
+	"github.com/golovpeter/avito-trainee-task-2023/internal/common"
+	"github.com/golovpeter/avito-trainee-task-2023/internal/config"
+	"github.com/golovpeter/avito-trainee-task-2023/internal/handler/change_user_segments"
+	"github.com/golovpeter/avito-trainee-task-2023/internal/handler/create_segment"
+	"github.com/golovpeter/avito-trainee-task-2023/internal/handler/delete_segment"
+	"github.com/golovpeter/avito-trainee-task-2023/internal/repository/segments"
+	"github.com/golovpeter/avito-trainee-task-2023/internal/repository/user_segments"
+	"github.com/golovpeter/avito-trainee-task-2023/internal/service/change_user_segments_service"
+	create_segment_service "github.com/golovpeter/avito-trainee-task-2023/internal/service/create_segment"
+	delete_segment_service "github.com/golovpeter/avito-trainee-task-2023/internal/service/delete_segment"
 )
 
 func main() {
@@ -29,27 +35,28 @@ func main() {
 
 	logger.SetLevel(level)
 
-	db, err := sqlx.Connect("pgx",
-		fmt.Sprintf("postgres://%s:%s@%s:%s/%s",
-			cfg.Database.Username,
-			cfg.Database.Password,
-			cfg.Database.Host,
-			cfg.Database.Port,
-			cfg.Database.Database))
-
+	dbConn, err := common.CreateDbClient(cfg.Database)
 	if err != nil {
-		logger.WithError(err).Error("database connection error")
-		return
-	}
-
-	if err = db.Ping(); err != nil {
-		logger.WithError(err).Error("database access error")
+		logrus.WithError(err).Error("error to create database client")
 		return
 	}
 
 	router := gin.Default()
-	router.POST("api/v1/segment/create", create_segment.NewHandler(logger, db).CreateSegment)
-	router.POST("api/v1/segment/delete", delete_segment.NewHandler(logger, db).DeleteSegment)
+
+	segmentsRepository := segments.NewRepository(dbConn)
+	userSegmentsRepository := user_segments.NewRepository(dbConn)
+
+	changeUserSegmentsService := change_user_segments_service.NewService(segmentsRepository, userSegmentsRepository)
+	createSegmentService := create_segment_service.NewService(segmentsRepository)
+	deleteSegmentService := delete_segment_service.NewService(segmentsRepository)
+
+	createSegmentHandler := create_segment.NewHandler(logger, createSegmentService)
+	deleteSegmentHandler := delete_segment.NewHandler(logger, deleteSegmentService)
+	changeUserSegmentsHandler := change_user_segments.NewHandler(changeUserSegmentsService, logger)
+
+	router.POST("/v1/segment/create", createSegmentHandler.CreateSegment)
+	router.POST("/v1/segment/delete", deleteSegmentHandler.DeleteSegment)
+	router.POST("/v1/segment/changeForUser", changeUserSegmentsHandler.ChangeUserSegments)
 
 	if err = router.Run(fmt.Sprintf(":%d", cfg.Server.Port)); err != nil {
 		logger.WithError(err).Error("server error occurred")

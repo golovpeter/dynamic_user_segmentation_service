@@ -1,74 +1,66 @@
 package create_segment
 
 import (
-	"errors"
-	"regexp"
-	"unicode/utf8"
-
 	"github.com/gin-gonic/gin"
-	"github.com/golovpeter/avito-trainee-task-2023/internal/dto/create_segment_dto"
-	"github.com/golovpeter/avito-trainee-task-2023/internal/repository/segments"
-	"github.com/jmoiron/sqlx"
+	"github.com/golovpeter/avito-trainee-task-2023/internal/common"
+	"github.com/golovpeter/avito-trainee-task-2023/internal/service/create_segment"
 	"github.com/sirupsen/logrus"
+	"net/http"
 )
 
 type handler struct {
-	log  *logrus.Logger
-	conn *sqlx.DB
+	service create_segment.CreateSegmentService
+	log     *logrus.Logger
 }
 
-func NewHandler(log *logrus.Logger, conn *sqlx.DB) *handler {
+func NewHandler(
+	log *logrus.Logger,
+	service create_segment.CreateSegmentService,
+) *handler {
 	return &handler{
-		conn: conn,
-		log:  log,
+		log:     log,
+		service: service,
 	}
 }
 
 func (h *handler) CreateSegment(c *gin.Context) {
-	var in create_segment_dto.CreateSegmentIn
+	var in CreateSegmentIn
 
 	if err := c.BindJSON(&in); err != nil {
 		h.log.WithError(err).Error("error binding JSON")
-		c.JSON(400, gin.H{
-			"error_message": err.Error(),
+		c.JSON(http.StatusBadRequest, common.ErrorOut{
+			ErrorMessage: "error binding JSON",
 		})
 		return
 	}
 
-	err := validateSlug(in.SegmentSlug)
+	isValid, errMessage, err := validateInParams(in.SegmentSlug)
+
 	if err != nil {
-		h.log.Error(err)
-		c.JSON(400, gin.H{
-			"error_message": err.Error(),
+		h.log.WithError(err).Error(err.Error())
+		c.JSON(http.StatusInternalServerError, common.ErrorOut{
+			ErrorMessage: err.Error(),
 		})
 		return
 	}
-
-	conn := segments.NewDbSegment(h.conn)
-
-	err = conn.CreateSegment(in.SegmentSlug)
-	if err != nil {
-		h.log.WithError(err).Error("error adding a segment")
-		c.JSON(400, gin.H{
-			"error_message": err.Error(),
-		})
-		return
-	}
-
-	c.Status(200)
-}
-
-func validateSlug(slug string) error {
-	if utf8.RuneCountInString(slug) > 256 {
-		return errors.New("line length exceeded")
-	}
-
-	validPattern := `^AVITO_[A-Z0-9_]+(_[A-Z0-9_]+)*$`
-	isValid := regexp.MustCompile(validPattern).MatchString(slug)
 
 	if !isValid {
-		return errors.New("invalid slug format")
+		h.log.Warn(errMessage)
+		c.JSON(http.StatusBadRequest, common.ErrorOut{
+			ErrorMessage: errMessage,
+		})
+		return
 	}
 
-	return nil
+	err = h.service.CreateSegment(&create_segment.CreateSegmentData{
+		SegmentSlug: in.SegmentSlug,
+	})
+
+	if err != nil {
+		h.log.WithError(err).Error("error create segments")
+		c.JSON(http.StatusInternalServerError, common.ErrorOut{
+			ErrorMessage: "error create segments",
+		})
+		return
+	}
 }
