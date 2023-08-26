@@ -17,7 +17,7 @@ func NewService(
 func (s *service) GetUserSegments(data *GetUserSegmentsData) ([]string, error) {
 	userSegments, err := s.repository.GetUserSegments(data.UserId)
 	if err != nil {
-		return []string{}, nil
+		return []string{}, err
 	}
 
 	return userSegments, nil
