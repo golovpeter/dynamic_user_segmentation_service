@@ -76,3 +76,18 @@ func (mr *MockRepositoryMockRecorder) GetActiveSegmentsIdsBySlugs(slugs interfac
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetActiveSegmentsIdsBySlugs", reflect.TypeOf((*MockRepository)(nil).GetActiveSegmentsIdsBySlugs), slugs)
 }
+
+// GetUserSegments mocks base method.
+func (m *MockRepository) GetUserSegments(id int64) ([]string, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetUserSegments", id)
+	ret0, _ := ret[0].([]string)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetUserSegments indicates an expected call of GetUserSegments.
+func (mr *MockRepositoryMockRecorder) GetUserSegments(id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserSegments", reflect.TypeOf((*MockRepository)(nil).GetUserSegments), id)
+}
