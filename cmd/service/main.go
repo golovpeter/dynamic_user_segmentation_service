@@ -11,11 +11,13 @@ import (
 	"github.com/golovpeter/avito-trainee-task-2023/internal/handler/change_user_segments"
 	"github.com/golovpeter/avito-trainee-task-2023/internal/handler/create_segment"
 	"github.com/golovpeter/avito-trainee-task-2023/internal/handler/delete_segment"
+	"github.com/golovpeter/avito-trainee-task-2023/internal/handler/get_user_segments"
 	"github.com/golovpeter/avito-trainee-task-2023/internal/repository/segments"
 	"github.com/golovpeter/avito-trainee-task-2023/internal/repository/user_segments"
 	"github.com/golovpeter/avito-trainee-task-2023/internal/service/change_user_segments_service"
 	create_segment_service "github.com/golovpeter/avito-trainee-task-2023/internal/service/create_segment"
 	delete_segment_service "github.com/golovpeter/avito-trainee-task-2023/internal/service/delete_segment"
+	get_user_segments_service "github.com/golovpeter/avito-trainee-task-2023/internal/service/get_user_segments"
 )
 
 func main() {
@@ -49,14 +51,17 @@ func main() {
 	changeUserSegmentsService := change_user_segments_service.NewService(segmentsRepository, userSegmentsRepository)
 	createSegmentService := create_segment_service.NewService(segmentsRepository)
 	deleteSegmentService := delete_segment_service.NewService(segmentsRepository)
+	getUserSegmentsService := get_user_segments_service.NewService(segmentsRepository)
 
 	createSegmentHandler := create_segment.NewHandler(logger, createSegmentService)
 	deleteSegmentHandler := delete_segment.NewHandler(logger, deleteSegmentService)
 	changeUserSegmentsHandler := change_user_segments.NewHandler(changeUserSegmentsService, logger)
+	getUserSegmentsHandler := get_user_segments.NewHandler(logger, getUserSegmentsService)
 
 	router.POST("/v1/segment/create", createSegmentHandler.CreateSegment)
 	router.POST("/v1/segment/delete", deleteSegmentHandler.DeleteSegment)
 	router.POST("/v1/segment/changeForUser", changeUserSegmentsHandler.ChangeUserSegments)
+	router.GET("/v1/segments/user/:user_id", getUserSegmentsHandler.GetUserSegments)
 
 	if err = router.Run(fmt.Sprintf(":%d", cfg.Server.Port)); err != nil {
 		logger.WithError(err).Error("server error occurred")

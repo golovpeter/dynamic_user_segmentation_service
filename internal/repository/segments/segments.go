@@ -73,3 +73,21 @@ func (s *repository) GetActiveSegmentsIdsBySlugs(slugs []string) (map[string]int
 
 	return slugsWithIds, nil
 }
+
+const getUserSegmentsQuery = `
+	SELECT slug
+	FROM users_to_segments us
+	INNER JOIN segments s ON s.id = us.segment_id
+	WHERE user_id = $1
+`
+
+func (s *repository) GetUserSegments(id int64) ([]string, error) {
+	segments := make([]string, 0)
+
+	err := s.conn.Select(&segments, getUserSegmentsQuery, id)
+	if err != nil {
+		return []string{}, err
+	}
+
+	return segments, nil
+}
