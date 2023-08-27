@@ -18,8 +18,8 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        APP_PATH: "./cmd/api"
-        FILE_NAME: "api"
+        MAIN_FILE_PATH: "./cmd/api"
+        EXEC_FILE_NAME: "api"
     ports:
       - "8080:8080"
     environment:
@@ -29,14 +29,14 @@ services:
     depends_on:
       - postgres
 
-  worker:
+  delete_expired_users_worker:
     build:
       context: .
       dockerfile: Dockerfile
       args:
-        APP_PATH: "./cmd/time_segment_worker"
-        FILE_NAME: "time_segment_worker"
-    command: "./time_segment_worker"
+        MAIN_FILE_PATH: "./cmd/worker/delete_expired_user_segments"
+        EXEC_FILE_NAME: "delete_expired_user_segments"
+    command: "./delete_expired_user_segments"
     restart: always
     depends_on:
       - postgres

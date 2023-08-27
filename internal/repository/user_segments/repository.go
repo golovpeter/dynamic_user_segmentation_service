@@ -75,12 +75,12 @@ func (u *repository) ChangeUserSegments(changeData ChangeUserSegmentsData) error
 	return nil
 }
 
-const deleteExpiredUsersQuery = `
+const deleteExpiredUserSegmentsQuery = `
 	DELETE FROM users_to_segments
 	WHERE expired_at <= now();
 `
 
-func (u *repository) DeleteUsersAfterTime() error {
-	_, err := u.conn.Exec(deleteExpiredUsersQuery)
+func (u *repository) DeleteExpiredUserSegments() error {
+	_, err := u.conn.Exec(deleteExpiredUserSegmentsQuery)
 	return err
 }

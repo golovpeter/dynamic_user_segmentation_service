@@ -9,13 +9,8 @@ RUN go mod download
 COPY . .
 
 # Аргумент для передачи пути к файлу
-ARG APP_PATH
-ARG FILE_NAME
+ARG MAIN_FILE_PATH
+ARG EXEC_FILE_NAME
 
 # Собираем приложение внутри контейнера
-RUN go build -o $FILE_NAME $APP_PATH
-
-EXPOSE 8080
-
-# Команда по умолчанию для запуска приложения
-#CMD ["./$FILE_NAME"]
+RUN go build -o $EXEC_FILE_NAME $MAIN_FILE_PATH

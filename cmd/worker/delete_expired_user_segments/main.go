@@ -4,7 +4,7 @@ import (
 	"github.com/golovpeter/avito-trainee-task-2023/internal/common"
 	"github.com/golovpeter/avito-trainee-task-2023/internal/config"
 	"github.com/golovpeter/avito-trainee-task-2023/internal/repository/user_segments"
-	"github.com/golovpeter/avito-trainee-task-2023/internal/service/delete_after_time_segments"
+	"github.com/golovpeter/avito-trainee-task-2023/internal/service/delete_expired_user_segments"
 	"os"
 	"os/signal"
 	"syscall"
@@ -32,7 +32,7 @@ func main() {
 	}
 
 	userSegmentsRepository := user_segments.NewRepository(dbConn)
-	deleteAfterTimeSegmentsService := delete_after_time_segments.NewService(userSegmentsRepository)
+	deleteExpiredUserSegmentsService := delete_expired_user_segments.NewService(userSegmentsRepository)
 
 	ticker := time.NewTicker(tickerInterval)
 	signal.Notify(signalChan, syscall.SIGINT, syscall.SIGTERM, syscall.SIGKILL)
@@ -42,7 +42,7 @@ func main() {
 	for {
 		select {
 		case <-ticker.C:
-			err = deleteAfterTimeSegmentsService.DeleteUsersAfterTime()
+			err = deleteExpiredUserSegmentsService.DeleteExpiredUserSegments()
 			if err != nil {
 				logger.WithError(err).Error("error delete expired user segments")
 			}

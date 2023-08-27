@@ -1,4 +1,4 @@
-package delete_after_time_segments
+package delete_expired_user_segments
 
 import "github.com/golovpeter/avito-trainee-task-2023/internal/repository/user_segments"
 
@@ -14,6 +14,6 @@ func NewService(
 	}
 }
 
-func (s *service) DeleteUsersAfterTime() error {
-	return s.repository.DeleteUsersAfterTime()
+func (s *service) DeleteExpiredUserSegments() error {
+	return s.repository.DeleteExpiredUserSegments()
 }
