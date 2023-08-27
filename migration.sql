@@ -11,6 +11,7 @@ CREATE TABLE users_to_segments
 (
     user_id    BIGINT NOT NULL,
     segment_id BIGINT NOT NULL REFERENCES segments (id),
+    expired_at TIMESTAMP WITH TIME ZONE,
     CONSTRAINT unique_user_segment UNIQUE (user_id, segment_id)
 );
 

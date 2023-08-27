@@ -61,6 +61,7 @@ func (s *service) ChangeUserSegments(data *ChangeUserSegmentsData) error {
 			AddSegmentsIds:    addSegmentsIds,
 			DeleteSegmentsIds: deleteSegmentsIds,
 			UserID:            data.UserID,
+			ExpiredAt:         data.ExpiredAt,
 		},
 	)
 

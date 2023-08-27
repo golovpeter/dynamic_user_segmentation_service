@@ -23,6 +23,7 @@
 
 # Go workspace file
 go.work
+todo.md
 
 ### Go Patch ###
 /Godeps/

@@ -15,6 +15,8 @@ definitions:
         items:
           type: string
         type: array
+      expired_at:
+        type: string
       user_id:
         example: 1000
         type: integer
@@ -50,9 +52,9 @@ definitions:
 host: localhost:8080
 info:
   contact: {}
-  description: API for Golang Dynamic User Segmentation service.
+  description: API for Golang Dynamic User Segmentation api.
   termsOfService: http://swagger.io/terms/
-  title: Dynamic User Segmentation service Swagger API
+  title: Dynamic User Segmentation api Swagger API
   version: "1.0"
 paths:
   /segment/changeForUser:

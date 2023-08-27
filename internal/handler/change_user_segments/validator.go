@@ -2,6 +2,7 @@ package change_user_segments
 
 import (
 	"fmt"
+	"time"
 )
 
 func validateInParams(in *ChangeUserSegmentsIn) (bool, string) {
@@ -11,6 +12,10 @@ func validateInParams(in *ChangeUserSegmentsIn) (bool, string) {
 
 	if len(in.AddSegments) == 0 && len(in.DeleteSegments) == 0 {
 		return false, "at least one add or delete segments shouldn't be empty"
+	}
+
+	if !in.ExpiredAt.IsZero() && in.ExpiredAt.Before(time.Now()) {
+		return false, "expiredAt should be after current time"
 	}
 
 	interSegments := intersectionSegments(in.AddSegments, in.DeleteSegments)

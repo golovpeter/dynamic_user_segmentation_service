@@ -23,9 +23,9 @@ import (
 	get_user_segments_service "github.com/golovpeter/avito-trainee-task-2023/internal/service/get_user_segments"
 )
 
-// @title           Dynamic User Segmentation service Swagger API
+// @title           Dynamic User Segmentation api Swagger API
 // @version         1.0
-// @description     API for Golang Dynamic User Segmentation service.
+// @description     API for Golang Dynamic User Segmentation api.
 // @termsOfService  http://swagger.io/terms/
 
 // @host      localhost:8080
@@ -49,7 +49,7 @@ func main() {
 
 	dbConn, err := common.CreateDbClient(cfg.Database)
 	if err != nil {
-		logrus.WithError(err).Error("error to create database client")
+		logger.WithError(err).Error("error to create database client")
 		return
 	}
 

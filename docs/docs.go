@@ -214,6 +214,9 @@ const docTemplate = `{
                         "AVITO_DICOUNT_50"
                     ]
                 },
+                "expired_at": {
+                    "type": "string"
+                },
                 "user_id": {
                     "type": "integer",
                     "example": 1000
@@ -271,8 +274,8 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "localhost:8080",
 	BasePath:         "/v1",
 	Schemes:          []string{},
-	Title:            "Dynamic User Segmentation service Swagger API",
-	Description:      "API for Golang Dynamic User Segmentation service.",
+	Title:            "Dynamic User Segmentation api Swagger API",
+	Description:      "API for Golang Dynamic User Segmentation api.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

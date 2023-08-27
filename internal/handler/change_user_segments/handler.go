@@ -1,11 +1,12 @@
 package change_user_segments
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/golovpeter/avito-trainee-task-2023/internal/common"
 	"github.com/golovpeter/avito-trainee-task-2023/internal/service/change_user_segments"
 	"github.com/sirupsen/logrus"
-	"net/http"
 )
 
 type handler struct {
@@ -58,6 +59,7 @@ func (h *handler) ChangeUserSegments(c *gin.Context) {
 		AddSegments:    in.AddSegments,
 		DeleteSegments: in.DeleteSegments,
 		UserID:         in.UserID,
+		ExpiredAt:      in.ExpiredAt,
 	})
 
 	if err != nil {

@@ -46,3 +46,17 @@ func (mr *MockRepositoryMockRecorder) ChangeUserSegments(changeData interface{})
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ChangeUserSegments", reflect.TypeOf((*MockRepository)(nil).ChangeUserSegments), changeData)
 }
+
+// DeleteUsersAfterTime mocks base method.
+func (m *MockRepository) DeleteUsersAfterTime() error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteUsersAfterTime")
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteUsersAfterTime indicates an expected call of DeleteUsersAfterTime.
+func (mr *MockRepositoryMockRecorder) DeleteUsersAfterTime() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteUsersAfterTime", reflect.TypeOf((*MockRepository)(nil).DeleteUsersAfterTime))
+}

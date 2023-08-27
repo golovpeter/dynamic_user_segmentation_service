@@ -1,12 +1,13 @@
 package get_user_segments
 
 import (
+	"net/http"
+	"strconv"
+
 	"github.com/gin-gonic/gin"
 	"github.com/golovpeter/avito-trainee-task-2023/internal/common"
 	"github.com/golovpeter/avito-trainee-task-2023/internal/service/get_user_segments"
 	"github.com/sirupsen/logrus"
-	"net/http"
-	"strconv"
 )
 
 type handler struct {
@@ -57,6 +58,7 @@ func (h *handler) GetUserSegments(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, common.ErrorOut{
 			ErrorMessage: "error get user segments",
 		})
+		return
 	}
 
 	c.JSON(http.StatusOK, GetUserSegmentsOut{

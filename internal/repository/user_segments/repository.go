@@ -28,13 +28,17 @@ func (u *repository) ChangeUserSegments(changeData ChangeUserSegmentsData) error
 
 	if len(changeData.AddSegmentsIds) != 0 {
 		insertBuilder := squirrel.Insert("users_to_segments").
-			Columns("user_id", "segment_id").PlaceholderFormat(squirrel.Dollar)
+			Columns("user_id", "segment_id", "expired_at").PlaceholderFormat(squirrel.Dollar)
 
 		for _, segmentId := range changeData.AddSegmentsIds {
-			insertBuilder = insertBuilder.Values(changeData.UserID, segmentId)
+			insertBuilder = insertBuilder.Values(changeData.UserID, segmentId, changeData.ExpiredAt)
 		}
 
-		insertBuilder = insertBuilder.Suffix("ON CONFLICT DO NOTHING")
+		if changeData.ExpiredAt.IsZero() {
+			insertBuilder = insertBuilder.Suffix("ON CONFLICT (user_id, segment_id) DO UPDATE SET expired_at = null")
+		} else {
+			insertBuilder = insertBuilder.Suffix("ON CONFLICT (user_id, segment_id) DO UPDATE SET expired_at = ?", changeData.ExpiredAt)
+		}
 
 		query, args, err := insertBuilder.ToSql()
 		if err != nil {
@@ -69,4 +73,14 @@ func (u *repository) ChangeUserSegments(changeData ChangeUserSegmentsData) error
 	}
 
 	return nil
+}
+
+const deleteExpiredUsersQuery = `
+	DELETE FROM users_to_segments
+	WHERE expired_at <= now();
+`
+
+func (u *repository) DeleteUsersAfterTime() error {
+	_, err := u.conn.Exec(deleteExpiredUsersQuery)
+	return err
 }
