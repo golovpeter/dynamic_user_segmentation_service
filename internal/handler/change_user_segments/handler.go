@@ -23,6 +23,17 @@ func NewHandler(
 	}
 }
 
+// Delete segment godoc
+// @Summary      Change user segments
+// @Description	 delete and create user segments by name
+// @Tags         segments
+// @Accept       json
+// @Produce      json
+// @Param request body ChangeUserSegmentsIn true "request"
+// @Success 200
+// @Failure 400 {object} common.ErrorOut
+// @Failure 500 {object} common.ErrorOut
+// @Router       /segment/changeForUser [post]
 func (h *handler) ChangeUserSegments(c *gin.Context) {
 	var in ChangeUserSegmentsIn
 

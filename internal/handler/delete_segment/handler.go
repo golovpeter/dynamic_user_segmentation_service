@@ -25,6 +25,17 @@ func NewHandler(
 	}
 }
 
+// Delete segment godoc
+// @Summary      Delete segment
+// @Description	 deleting segment by name
+// @Tags         segments
+// @Accept       json
+// @Produce      json
+// @Param request body DeleteSegmentIn true "request"
+// @Success 200
+// @Failure 400 {object} common.ErrorOut
+// @Failure 500 {object} common.ErrorOut
+// @Router       /segment/delete [post]
 func (h *handler) DeleteSegment(c *gin.Context) {
 	var in DeleteSegmentIn
 

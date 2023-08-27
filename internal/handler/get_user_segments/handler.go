@@ -24,6 +24,17 @@ func NewHandler(
 	}
 }
 
+// Get all use segments godoc
+// @Summary      Get all user segments
+// @Description	 getting all user segments by user id
+// @Tags         segments
+// @Accept       json
+// @Produce      json
+// @Param user_id path int true "User ID"
+// @Success 200 {object} GetUserSegmentsOut
+// @Failure 400 {object} common.ErrorOut
+// @Failure 500 {object} common.ErrorOut
+// @Router       /segments/user/{user_id} [get]
 func (h *handler) GetUserSegments(c *gin.Context) {
 	userIdParam := c.Param("user_id")
 

@@ -1,0 +1,171 @@
+basePath: /v1
+definitions:
+  change_user_segments.ChangeUserSegmentsIn:
+    properties:
+      add_segments:
+        example:
+        - AVITO_VOICE_MESSAGE
+        - AVITO_DICSOUNT_30
+        items:
+          type: string
+        type: array
+      delete_segments:
+        example:
+        - AVITO_DICOUNT_50
+        items:
+          type: string
+        type: array
+      user_id:
+        example: 1000
+        type: integer
+    type: object
+  common.ErrorOut:
+    properties:
+      error_message:
+        example: error message
+        type: string
+    type: object
+  create_segment.CreateSegmentIn:
+    properties:
+      segment_slug:
+        example: AVITO_VOICE_MESSAGE
+        type: string
+    type: object
+  delete_segment.DeleteSegmentIn:
+    properties:
+      segment_slug:
+        example: AVITO_VOICE_MESSAGE
+        type: string
+    type: object
+  get_user_segments.GetUserSegmentsOut:
+    properties:
+      segments:
+        example:
+        - AVITO_VOICE_MESSAGE
+        - ' AVITO_DISCOUNT_30'
+        items:
+          type: string
+        type: array
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API for Golang Dynamic User Segmentation service.
+  termsOfService: http://swagger.io/terms/
+  title: Dynamic User Segmentation service Swagger API
+  version: "1.0"
+paths:
+  /segment/changeForUser:
+    post:
+      consumes:
+      - application/json
+      description: delete and create user segments by name
+      parameters:
+      - description: request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/change_user_segments.ChangeUserSegmentsIn'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.ErrorOut'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.ErrorOut'
+      summary: Change user segments
+      tags:
+      - segments
+  /segment/create:
+    post:
+      consumes:
+      - application/json
+      description: adding a new segment by name
+      parameters:
+      - description: request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/create_segment.CreateSegmentIn'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.ErrorOut'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.ErrorOut'
+      summary: Create new segment
+      tags:
+      - segments
+  /segment/delete:
+    post:
+      consumes:
+      - application/json
+      description: deleting segment by name
+      parameters:
+      - description: request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/delete_segment.DeleteSegmentIn'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.ErrorOut'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.ErrorOut'
+      summary: Delete segment
+      tags:
+      - segments
+  /segments/user/{user_id}:
+    get:
+      consumes:
+      - application/json
+      description: getting all user segments by user id
+      parameters:
+      - description: User ID
+        in: path
+        name: user_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/get_user_segments.GetUserSegmentsOut'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.ErrorOut'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/common.ErrorOut'
+      summary: Get all user segments
+      tags:
+      - segments
+swagger: "2.0"

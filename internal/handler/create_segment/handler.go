@@ -23,6 +23,17 @@ func NewHandler(
 	}
 }
 
+// Create segment godoc
+// @Summary      Create new segment
+// @Description	 adding a new segment by name
+// @Tags         segments
+// @Accept       json
+// @Produce      json
+// @Param request body CreateSegmentIn true "request"
+// @Success 200
+// @Failure 400 {object} common.ErrorOut
+// @Failure 500 {object} common.ErrorOut
+// @Router       /segment/create [post]
 func (h *handler) CreateSegment(c *gin.Context) {
 	var in CreateSegmentIn
 

@@ -5,7 +5,10 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 
+	_ "github.com/golovpeter/avito-trainee-task-2023/docs"
 	"github.com/golovpeter/avito-trainee-task-2023/internal/common"
 	"github.com/golovpeter/avito-trainee-task-2023/internal/config"
 	"github.com/golovpeter/avito-trainee-task-2023/internal/handler/change_user_segments"
@@ -20,6 +23,13 @@ import (
 	get_user_segments_service "github.com/golovpeter/avito-trainee-task-2023/internal/service/get_user_segments"
 )
 
+// @title           Dynamic User Segmentation service Swagger API
+// @version         1.0
+// @description     API for Golang Dynamic User Segmentation service.
+// @termsOfService  http://swagger.io/terms/
+
+// @host      localhost:8080
+// @BasePath  /v1
 func main() {
 	logger := logrus.New()
 
@@ -62,6 +72,8 @@ func main() {
 	router.POST("/v1/segment/delete", deleteSegmentHandler.DeleteSegment)
 	router.POST("/v1/segment/changeForUser", changeUserSegmentsHandler.ChangeUserSegments)
 	router.GET("/v1/segments/user/:user_id", getUserSegmentsHandler.GetUserSegments)
+
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
 	if err = router.Run(fmt.Sprintf(":%d", cfg.Server.Port)); err != nil {
 		logger.WithError(err).Error("server error occurred")
