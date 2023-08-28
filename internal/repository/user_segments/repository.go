@@ -31,6 +31,11 @@ func (u *repository) ChangeUserSegments(changeData ChangeUserSegmentsData) error
 			Columns("user_id", "segment_id", "expired_at").PlaceholderFormat(squirrel.Dollar)
 
 		for _, segmentId := range changeData.AddSegmentsIds {
+			if changeData.ExpiredAt.IsZero() {
+				insertBuilder = insertBuilder.Values(changeData.UserID, segmentId, nil)
+				continue
+			}
+
 			insertBuilder = insertBuilder.Values(changeData.UserID, segmentId, changeData.ExpiredAt)
 		}
 
