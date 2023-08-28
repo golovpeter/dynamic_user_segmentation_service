@@ -194,6 +194,9 @@ const docTemplate = `{
     "definitions": {
         "change_user_segments.ChangeUserSegmentsIn": {
             "type": "object",
+            "required": [
+                "user_id"
+            ],
             "properties": {
                 "add_segments": {
                     "type": "array",
@@ -215,7 +218,8 @@ const docTemplate = `{
                     ]
                 },
                 "expired_at": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "2023-08-27T15:40:00Z"
                 },
                 "user_id": {
                     "type": "integer",
@@ -234,6 +238,9 @@ const docTemplate = `{
         },
         "create_segment.CreateSegmentIn": {
             "type": "object",
+            "required": [
+                "segment_slug"
+            ],
             "properties": {
                 "segment_slug": {
                     "type": "string",
@@ -243,6 +250,9 @@ const docTemplate = `{
         },
         "delete_segment.DeleteSegmentIn": {
             "type": "object",
+            "required": [
+                "segment_slug"
+            ],
             "properties": {
                 "segment_slug": {
                     "type": "string",
