@@ -45,7 +45,7 @@ func (h *handler) CreateSegment(c *gin.Context) {
 		return
 	}
 
-	isValid, errMessage, err := validateInParams(in.SegmentSlug)
+	isValid, errMessage, err := validateInParams(in)
 
 	if err != nil {
 		h.log.WithError(err).Error(err.Error())
@@ -64,7 +64,8 @@ func (h *handler) CreateSegment(c *gin.Context) {
 	}
 
 	err = h.service.CreateSegment(&create_segment.CreateSegmentData{
-		SegmentSlug: in.SegmentSlug,
+		SegmentSlug:    in.SegmentSlug,
+		PercentOfUsers: in.PercentOfUsers,
 	})
 
 	if err != nil {

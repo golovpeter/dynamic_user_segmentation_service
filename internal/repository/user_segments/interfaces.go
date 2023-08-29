@@ -5,4 +5,6 @@ package user_segments
 type Repository interface {
 	ChangeUserSegments(changeData ChangeUserSegmentsData) error
 	DeleteExpiredUserSegments() error
+	GetUserSegments(id int64) (map[string]SegmentInfo, error)
+	AddOneUserSegment(userId, segmentId int64, addedSegment bool) error
 }

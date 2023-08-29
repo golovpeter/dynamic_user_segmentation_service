@@ -1,6 +1,7 @@
 package get_user_segments
 
 import (
+	"github.com/golovpeter/avito-trainee-task-2023/internal/cache/percent_segments"
 	"net/http"
 	"strconv"
 
@@ -13,15 +14,18 @@ import (
 type handler struct {
 	log     *logrus.Logger
 	service get_user_segments.GetUserSegmentsService
+	cache   *percent_segments.Cache
 }
 
 func NewHandler(
 	log *logrus.Logger,
 	service get_user_segments.GetUserSegmentsService,
+	cache *percent_segments.Cache,
 ) *handler {
 	return &handler{
 		log:     log,
 		service: service,
+		cache:   cache,
 	}
 }
 
@@ -50,7 +54,8 @@ func (h *handler) GetUserSegments(c *gin.Context) {
 
 	userSegments, err := h.service.GetUserSegments(
 		&get_user_segments.GetUserSegmentsData{
-			UserId: userId,
+			UserId:          userId,
+			PercentSegments: h.cache.Get(),
 		})
 
 	if err != nil {

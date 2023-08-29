@@ -17,19 +17,22 @@ func NewRepository(conn *sqlx.DB) *repository {
 }
 
 const createSegmentQuery = `
-	INSERT INTO segments(slug) 
-	VALUES ($1) 
+	INSERT INTO segments(slug, percentage_users) 
+	VALUES ($1, $2) 
 	ON CONFLICT (slug) DO 
 	UPDATE SET deleted = false, updated_at = now()
 `
 
-func (s *repository) CreateSegment(slug string) error {
-	_, err := s.conn.Exec(createSegmentQuery, slug)
-	if err != nil {
+func (s *repository) CreateSegment(slug string, percentageUsers int64) error {
+
+	//FIXME: выглядит не очень
+	if percentageUsers == 0 {
+		_, err := s.conn.Exec(createSegmentQuery, slug, nil)
 		return err
 	}
 
-	return nil
+	_, err := s.conn.Exec(createSegmentQuery, slug, percentageUsers)
+	return err
 }
 
 const deleteSegmentQuery = `
@@ -81,7 +84,7 @@ const getActiveSegmentsIdsBySlugsQuery = `
 `
 
 func (s *repository) GetActiveSegmentsIdsBySlugs(slugs []string) (map[string]int64, error) {
-	var segments []segment
+	var segments []Segment
 
 	query, args, err := sqlx.In(getActiveSegmentsIdsBySlugsQuery, slugs)
 	if err != nil {
@@ -104,20 +107,25 @@ func (s *repository) GetActiveSegmentsIdsBySlugs(slugs []string) (map[string]int
 	return slugsWithIds, nil
 }
 
-const getUserSegmentsQuery = `
-	SELECT slug
-	FROM users_to_segments us
-	INNER JOIN segments s ON s.id = us.segment_id
-	WHERE user_id = $1
+const getPercentSegmentsQuery = `
+	SELECT id, slug, percentage_users
+	FROM segments
+	WHERE percentage_users IS NOT NULL AND deleted = false 
 `
 
-func (s *repository) GetUserSegments(id int64) ([]string, error) {
-	segments := make([]string, 0)
+func (s *repository) GetPercentSegments() (map[string]Segment, error) {
+	var segments []Segment
 
-	err := s.conn.Select(&segments, getUserSegmentsQuery, id)
+	err := s.conn.Select(&segments, getPercentSegmentsQuery)
 	if err != nil {
-		return []string{}, err
+		return nil, err
 	}
 
-	return segments, nil
+	percentSegments := make(map[string]Segment)
+
+	for _, val := range segments {
+		percentSegments[val.Slug] = val
+	}
+
+	return percentSegments, err
 }

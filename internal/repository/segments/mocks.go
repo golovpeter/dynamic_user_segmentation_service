@@ -34,17 +34,17 @@ func (m *MockRepository) EXPECT() *MockRepositoryMockRecorder {
 }
 
 // CreateSegment mocks base method.
-func (m *MockRepository) CreateSegment(slug string) error {
+func (m *MockRepository) CreateSegment(slug string, percentageUsers int64) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreateSegment", slug)
+	ret := m.ctrl.Call(m, "CreateSegment", slug, percentageUsers)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // CreateSegment indicates an expected call of CreateSegment.
-func (mr *MockRepositoryMockRecorder) CreateSegment(slug interface{}) *gomock.Call {
+func (mr *MockRepositoryMockRecorder) CreateSegment(slug, percentageUsers interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateSegment", reflect.TypeOf((*MockRepository)(nil).CreateSegment), slug)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateSegment", reflect.TypeOf((*MockRepository)(nil).CreateSegment), slug, percentageUsers)
 }
 
 // DeleteSegment mocks base method.
@@ -77,17 +77,17 @@ func (mr *MockRepositoryMockRecorder) GetActiveSegmentsIdsBySlugs(slugs interfac
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetActiveSegmentsIdsBySlugs", reflect.TypeOf((*MockRepository)(nil).GetActiveSegmentsIdsBySlugs), slugs)
 }
 
-// GetUserSegments mocks base method.
-func (m *MockRepository) GetUserSegments(id int64) ([]string, error) {
+// GetPercentSegments mocks base method.
+func (m *MockRepository) GetPercentSegments() (map[string]Segment, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetUserSegments", id)
-	ret0, _ := ret[0].([]string)
+	ret := m.ctrl.Call(m, "GetPercentSegments")
+	ret0, _ := ret[0].(map[string]Segment)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// GetUserSegments indicates an expected call of GetUserSegments.
-func (mr *MockRepositoryMockRecorder) GetUserSegments(id interface{}) *gomock.Call {
+// GetPercentSegments indicates an expected call of GetPercentSegments.
+func (mr *MockRepositoryMockRecorder) GetPercentSegments() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserSegments", reflect.TypeOf((*MockRepository)(nil).GetUserSegments), id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPercentSegments", reflect.TypeOf((*MockRepository)(nil).GetPercentSegments))
 }

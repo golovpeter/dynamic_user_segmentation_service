@@ -15,5 +15,5 @@ func NewService(
 }
 
 func (s *service) CreateSegment(data *CreateSegmentData) error {
-	return s.repository.CreateSegment(data.SegmentSlug)
+	return s.repository.CreateSegment(data.SegmentSlug, data.PercentOfUsers)
 }

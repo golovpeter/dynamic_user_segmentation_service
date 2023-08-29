@@ -1,5 +1,6 @@
 package create_segment
 
 type CreateSegmentData struct {
-	SegmentSlug string
+	SegmentSlug    string
+	PercentOfUsers int64
 }

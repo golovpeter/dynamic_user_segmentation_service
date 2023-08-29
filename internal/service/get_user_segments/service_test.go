@@ -2,13 +2,12 @@ package get_user_segments
 
 import (
 	"errors"
+	"github.com/golovpeter/avito-trainee-task-2023/internal/repository/user_segments"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"go.uber.org/mock/gomock"
-
-	"github.com/golovpeter/avito-trainee-task-2023/internal/repository/segments"
 )
 
 type TestSuite struct {
@@ -16,7 +15,7 @@ type TestSuite struct {
 
 	ctrl *gomock.Controller
 
-	mockSegmentsRepository *segments.MockRepository
+	mockSegmentsRepository *user_segments.MockRepository
 
 	service GetUserSegmentsService
 }
@@ -24,7 +23,7 @@ type TestSuite struct {
 func (ts *TestSuite) SetupTest() {
 	ts.ctrl = gomock.NewController(ts.T())
 
-	ts.mockSegmentsRepository = segments.NewMockRepository(ts.ctrl)
+	ts.mockSegmentsRepository = user_segments.NewMockRepository(ts.ctrl)
 
 	ts.service = NewService(ts.mockSegmentsRepository)
 }

@@ -8,3 +8,9 @@ type ChangeUserSegmentsData struct {
 	UserID            int64
 	ExpiredAt         time.Time
 }
+
+type SegmentInfo struct {
+	Slug           string `db:"slug"`
+	ID             int    `db:"segment_id"`
+	AddedToSegment bool   `db:"added_to_segment"`
+}

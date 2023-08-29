@@ -2,11 +2,13 @@ package main
 
 import (
 	"fmt"
-
 	"github.com/gin-gonic/gin"
+	"github.com/golovpeter/avito-trainee-task-2023/internal/cache/percent_segments"
+	"github.com/golovpeter/avito-trainee-task-2023/internal/service/get_percent_segments"
 	"github.com/sirupsen/logrus"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
+	"time"
 
 	_ "github.com/golovpeter/avito-trainee-task-2023/docs"
 	"github.com/golovpeter/avito-trainee-task-2023/internal/common"
@@ -53,7 +55,7 @@ func main() {
 		return
 	}
 
-	router := gin.Default()
+	percentSegmentsCache := percent_segments.NewCache()
 
 	segmentsRepository := segments.NewRepository(dbConn)
 	userSegmentsRepository := user_segments.NewRepository(dbConn)
@@ -61,12 +63,31 @@ func main() {
 	changeUserSegmentsService := change_user_segments_service.NewService(segmentsRepository, userSegmentsRepository)
 	createSegmentService := create_segment_service.NewService(segmentsRepository)
 	deleteSegmentService := delete_segment_service.NewService(segmentsRepository)
-	getUserSegmentsService := get_user_segments_service.NewService(segmentsRepository)
+	getUserSegmentsService := get_user_segments_service.NewService(userSegmentsRepository)
+	getPercentService := get_percent_segments.NewService(segmentsRepository)
 
 	createSegmentHandler := create_segment.NewHandler(logger, createSegmentService)
 	deleteSegmentHandler := delete_segment.NewHandler(logger, deleteSegmentService)
 	changeUserSegmentsHandler := change_user_segments.NewHandler(changeUserSegmentsService, logger)
-	getUserSegmentsHandler := get_user_segments.NewHandler(logger, getUserSegmentsService)
+	getUserSegmentsHandler := get_user_segments.NewHandler(logger, getUserSegmentsService, percentSegmentsCache)
+
+	go func() {
+		ticker := time.NewTicker(time.Second * 5)
+
+		for {
+			select {
+			case <-ticker.C:
+				percentSegments, err := getPercentService.GetPercentSegments()
+				if err != nil {
+					logger.WithError(err)
+				}
+
+				percentSegmentsCache.Update(percentSegments)
+			}
+		}
+	}()
+
+	router := gin.Default()
 
 	router.POST("/v1/segment/create", createSegmentHandler.CreateSegment)
 	router.POST("/v1/segment/delete", deleteSegmentHandler.DeleteSegment)

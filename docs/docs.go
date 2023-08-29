@@ -242,6 +242,9 @@ const docTemplate = `{
                 "segment_slug"
             ],
             "properties": {
+                "percent_users": {
+                    "type": "integer"
+                },
                 "segment_slug": {
                     "type": "string",
                     "example": "AVITO_VOICE_MESSAGE"

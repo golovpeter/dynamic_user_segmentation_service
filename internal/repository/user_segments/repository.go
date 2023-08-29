@@ -28,15 +28,16 @@ func (u *repository) ChangeUserSegments(changeData ChangeUserSegmentsData) error
 
 	if len(changeData.AddSegmentsIds) != 0 {
 		insertBuilder := squirrel.Insert("users_to_segments").
-			Columns("user_id", "segment_id", "expired_at").PlaceholderFormat(squirrel.Dollar)
+			Columns("user_id", "segment_id", "expired_at", "added_to_segment").PlaceholderFormat(squirrel.Dollar)
 
+		//FIXME: выглядит не очень
 		for _, segmentId := range changeData.AddSegmentsIds {
 			if changeData.ExpiredAt.IsZero() {
-				insertBuilder = insertBuilder.Values(changeData.UserID, segmentId, nil)
+				insertBuilder = insertBuilder.Values(changeData.UserID, segmentId, nil, true)
 				continue
 			}
 
-			insertBuilder = insertBuilder.Values(changeData.UserID, segmentId, changeData.ExpiredAt)
+			insertBuilder = insertBuilder.Values(changeData.UserID, segmentId, changeData.ExpiredAt, true)
 		}
 
 		if changeData.ExpiredAt.IsZero() {
@@ -87,5 +88,36 @@ const deleteExpiredUserSegmentsQuery = `
 
 func (u *repository) DeleteExpiredUserSegments() error {
 	_, err := u.conn.Exec(deleteExpiredUserSegmentsQuery)
+	return err
+}
+
+const getUserSegmentsQuery = `
+	SELECT segment_id, slug, added_to_segment
+	FROM users_to_segments us
+	INNER JOIN segments s ON s.id = us.segment_id
+	WHERE user_id = $1 
+`
+
+func (s *repository) GetUserSegments(id int64) (map[string]SegmentInfo, error) {
+	segments := make([]SegmentInfo, 0)
+	err := s.conn.Select(&segments, getUserSegmentsQuery, id)
+
+	segmentsMap := make(map[string]SegmentInfo)
+	for _, val := range segments {
+		segmentsMap[val.Slug] = val
+	}
+
+	return segmentsMap, err
+}
+
+const addOneUserInSegmentQuery = `
+	INSERT INTO users_to_segments (user_id, segment_id, added_to_segment)
+	VALUES ($1, $2, $3) 
+	ON CONFLICT DO NOTHING 
+`
+
+func (s *repository) AddOneUserSegment(userId, segmentId int64, addedSegment bool) error {
+	_, err := s.conn.Exec(addOneUserInSegmentQuery, userId, segmentId, addedSegment)
+
 	return err
 }

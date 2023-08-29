@@ -32,6 +32,8 @@ definitions:
     type: object
   create_segment.CreateSegmentIn:
     properties:
+      percent_users:
+        type: integer
       segment_slug:
         example: AVITO_VOICE_MESSAGE
         type: string

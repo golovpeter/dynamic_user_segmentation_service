@@ -33,6 +33,20 @@ func (m *MockRepository) EXPECT() *MockRepositoryMockRecorder {
 	return m.recorder
 }
 
+// AddOneUserSegment mocks base method.
+func (m *MockRepository) AddOneUserSegment(userId, segmentId int64, addedSegment bool) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "AddOneUserSegment", userId, segmentId, addedSegment)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// AddOneUserSegment indicates an expected call of AddOneUserSegment.
+func (mr *MockRepositoryMockRecorder) AddOneUserSegment(userId, segmentId, addedSegment interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddOneUserSegment", reflect.TypeOf((*MockRepository)(nil).AddOneUserSegment), userId, segmentId, addedSegment)
+}
+
 // ChangeUserSegments mocks base method.
 func (m *MockRepository) ChangeUserSegments(changeData ChangeUserSegmentsData) error {
 	m.ctrl.T.Helper()
@@ -59,4 +73,19 @@ func (m *MockRepository) DeleteExpiredUserSegments() error {
 func (mr *MockRepositoryMockRecorder) DeleteExpiredUserSegments() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteExpiredUserSegments", reflect.TypeOf((*MockRepository)(nil).DeleteExpiredUserSegments))
+}
+
+// GetUserSegments mocks base method.
+func (m *MockRepository) GetUserSegments(id int64) (map[string]SegmentInfo, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetUserSegments", id)
+	ret0, _ := ret[0].(map[string]SegmentInfo)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetUserSegments indicates an expected call of GetUserSegments.
+func (mr *MockRepositoryMockRecorder) GetUserSegments(id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserSegments", reflect.TypeOf((*MockRepository)(nil).GetUserSegments), id)
 }

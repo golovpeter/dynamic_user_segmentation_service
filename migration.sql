@@ -1,10 +1,11 @@
 CREATE TABLE IF NOT EXISTS segments
 (
-    id         BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    slug       VARCHAR(256) UNIQUE      NOT NULL,
-    deleted    BOOLEAN                  NOT NULL DEFAULT FALSE,
-    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
-    updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
+    id               BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    slug             VARCHAR(256) UNIQUE      NOT NULL,
+    percentage_users INT,
+    deleted          BOOLEAN                  NOT NULL DEFAULT FALSE,
+    created_at       TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+    updated_at       TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
 );
 
 CREATE INDEX IF NOT EXISTS segments_search_by_slug_and_deleted_idx
@@ -13,9 +14,10 @@ CREATE INDEX IF NOT EXISTS segments_search_by_slug_and_deleted_idx
 
 CREATE TABLE IF NOT EXISTS users_to_segments
 (
-    user_id    BIGINT NOT NULL,
-    segment_id BIGINT NOT NULL REFERENCES segments (id),
-    expired_at TIMESTAMP WITH TIME ZONE,
+    user_id          BIGINT NOT NULL,
+    segment_id       BIGINT NOT NULL REFERENCES segments (id),
+    expired_at       TIMESTAMP WITH TIME ZONE,
+    added_to_segment BOOL   NOT NULL,
     CONSTRAINT unique_user_segment UNIQUE (user_id, segment_id)
 );
 
@@ -43,14 +45,17 @@ CREATE INDEX IF NOT EXISTS users_to_segments_history_created_at_idx
 CREATE OR REPLACE FUNCTION users_to_segments_history_trg()
     RETURNS trigger
     LANGUAGE 'plpgsql'
-AS $BODY$
+AS
+$BODY$
 BEGIN
     IF TG_OP = 'INSERT'
     THEN
-        INSERT INTO users_to_segments_history (user_id, segment_id, operation) VALUES (NEW.user_id, NEW.segment_id, 'create');
+        INSERT INTO users_to_segments_history (user_id, segment_id, operation)
+        VALUES (NEW.user_id, NEW.segment_id, 'create');
     ELSIF TG_OP = 'DELETE'
     THEN
-        INSERT INTO users_to_segments_history (user_id, segment_id, operation) VALUES (OLD.user_id, OLD.segment_id, 'delete');
+        INSERT INTO users_to_segments_history (user_id, segment_id, operation)
+        VALUES (OLD.user_id, OLD.segment_id, 'delete');
     END IF;
     RETURN NEW;
 END;
@@ -60,4 +65,4 @@ CREATE OR REPLACE TRIGGER users_to_segments_history_created_at_idx
     AFTER INSERT OR DELETE
     ON users_to_segments
     FOR EACH ROW
-    EXECUTE PROCEDURE users_to_segments_history_trg();
+EXECUTE PROCEDURE users_to_segments_history_trg();
