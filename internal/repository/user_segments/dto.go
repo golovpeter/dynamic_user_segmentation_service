@@ -11,6 +11,6 @@ type ChangeUserSegmentsData struct {
 
 type SegmentInfo struct {
 	Slug           string `db:"slug"`
-	ID             int    `db:"segment_id"`
+	ID             int64  `db:"segment_id"`
 	AddedToSegment bool   `db:"added_to_segment"`
 }

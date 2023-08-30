@@ -8,6 +8,7 @@ import (
 	"github.com/sirupsen/logrus"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
+	"sync"
 	"time"
 
 	_ "github.com/golovpeter/avito-trainee-task-2023/docs"
@@ -24,6 +25,8 @@ import (
 	delete_segment_service "github.com/golovpeter/avito-trainee-task-2023/internal/service/delete_segment"
 	get_user_segments_service "github.com/golovpeter/avito-trainee-task-2023/internal/service/get_user_segments"
 )
+
+const percentSegmentsCacheUpdateInterval = time.Minute
 
 // @title           Dynamic User Segmentation api Swagger API
 // @version         1.0
@@ -71,21 +74,12 @@ func main() {
 	changeUserSegmentsHandler := change_user_segments.NewHandler(changeUserSegmentsService, logger)
 	getUserSegmentsHandler := get_user_segments.NewHandler(logger, getUserSegmentsService, percentSegmentsCache)
 
-	go func() {
-		ticker := time.NewTicker(time.Second * 5)
+	wg := sync.WaitGroup{}
+	wg.Add(1)
+	go updatePercentSegmentsCache(getPercentService, percentSegmentsCache, &wg, logger)
 
-		for {
-			select {
-			case <-ticker.C:
-				percentSegments, err := getPercentService.GetPercentSegments()
-				if err != nil {
-					logger.WithError(err)
-				}
-
-				percentSegmentsCache.Update(percentSegments)
-			}
-		}
-	}()
+	// Ждем первого наполнения кэша сегментов с автоматическим процентом пользователей
+	wg.Wait()
 
 	router := gin.Default()
 
@@ -98,5 +92,35 @@ func main() {
 
 	if err = router.Run(fmt.Sprintf(":%d", cfg.Server.Port)); err != nil {
 		logger.WithError(err).Error("server error occurred")
+	}
+}
+
+func updatePercentSegmentsCache(
+	getPercentService get_percent_segments.GetPercentSegmentsService,
+	percentSegmentsCache *percent_segments.Cache,
+	wg *sync.WaitGroup,
+	logger *logrus.Logger,
+) {
+	// TODO избавиться от дублирующего кода
+	percentSegments, err := getPercentService.GetPercentSegments()
+	if err != nil {
+		logger.WithError(err).Error("error to get percent segments")
+	}
+
+	percentSegmentsCache.Update(percentSegments)
+	wg.Done()
+
+	ticker := time.NewTicker(percentSegmentsCacheUpdateInterval)
+
+	for {
+		select {
+		case <-ticker.C:
+			percentSegments, err = getPercentService.GetPercentSegments()
+			if err != nil {
+				logger.WithError(err).Error("error to get percent segments")
+			}
+
+			percentSegmentsCache.Update(percentSegments)
+		}
 	}
 }

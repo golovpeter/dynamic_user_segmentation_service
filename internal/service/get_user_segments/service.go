@@ -24,27 +24,33 @@ func (s *service) GetUserSegments(data *GetUserSegmentsData) ([]string, error) {
 		return []string{}, err
 	}
 
-	for key, val := range data.PercentSegments {
-		if _, ok := allUserSegments[key]; ok {
+	for slug, segmentInfo := range data.PercentSegments {
+		if _, ok := allUserSegments[slug]; ok {
 			continue
 		}
 
 		var addSegment bool
 		randomNumber := rand.Float64()
 
-		if randomNumber <= float64(val.PercentUsers)/100 {
+		if randomNumber <= float64(segmentInfo.PercentUsers)/100 {
 			addSegment = true
 		} else {
 			addSegment = false
 		}
 
-		err = s.userSegmentsRepository.AddOneUserSegment(data.UserId, val.Id, addSegment)
+		err = s.userSegmentsRepository.AddOneUserSegment(data.UserId, segmentInfo.Id, addSegment)
 		if err != nil {
 			return []string{}, nil
 		}
+
+		allUserSegments[slug] = user_segments.SegmentInfo{
+			Slug:           slug,
+			ID:             segmentInfo.Id,
+			AddedToSegment: addSegment,
+		}
 	}
 
-	var currentUserSegments []string
+	var currentUserSegments = make([]string, 0, len(allUserSegments))
 
 	for key, val := range allUserSegments {
 		if val.AddedToSegment == true {

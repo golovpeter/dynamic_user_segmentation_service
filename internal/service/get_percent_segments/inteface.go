@@ -1,5 +1,7 @@
 package get_percent_segments
 
-type GetPercentSegmentsSerivce interface {
-	GetPercentSegments() error
+import "github.com/golovpeter/avito-trainee-task-2023/internal/repository/segments"
+
+type GetPercentSegmentsService interface {
+	GetPercentSegments() (map[string]segments.Segment, error)
 }

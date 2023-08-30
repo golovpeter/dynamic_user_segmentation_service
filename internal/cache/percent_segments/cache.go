@@ -12,14 +12,10 @@ func NewCache() *Cache {
 	}
 }
 
-func (c *Cache) Set(slug string, newSegment segments.Segment) {
-	c.elements[slug] = newSegment
+func (c *Cache) Get() map[string]segments.Segment {
+	return c.elements
 }
 
 func (c *Cache) Update(segments map[string]segments.Segment) {
 	c.elements = segments
-}
-
-func (c *Cache) Get() map[string]segments.Segment {
-	return c.elements
 }
