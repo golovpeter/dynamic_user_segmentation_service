@@ -24,7 +24,9 @@ func (s *service) GetUserSegments(data *GetUserSegmentsData) ([]string, error) {
 		return []string{}, err
 	}
 
-	for slug, segmentInfo := range data.PercentSegments {
+	percentSegments := data.PercentSegmentsCache.Get()
+
+	for slug, segmentInfo := range percentSegments {
 		if _, ok := allUserSegments[slug]; ok {
 			continue
 		}

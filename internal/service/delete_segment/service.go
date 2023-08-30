@@ -1,6 +1,8 @@
 package delete_segment
 
-import "github.com/golovpeter/avito-trainee-task-2023/internal/repository/segments"
+import (
+	"github.com/golovpeter/avito-trainee-task-2023/internal/repository/segments"
+)
 
 type service struct {
 	repository segments.Repository
@@ -24,5 +26,6 @@ func (s *service) DeleteSegment(data *DeleteSegmentData) error {
 		return ErrSegmentNotFound
 	}
 
+	data.PercentSegmentsCache.Delete(data.SegmentSlug)
 	return err
 }

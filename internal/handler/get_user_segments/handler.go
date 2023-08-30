@@ -54,8 +54,8 @@ func (h *handler) GetUserSegments(c *gin.Context) {
 
 	userSegments, err := h.service.GetUserSegments(
 		&get_user_segments.GetUserSegmentsData{
-			UserId:          userId,
-			PercentSegments: h.cache.Get(),
+			UserId:               userId,
+			PercentSegmentsCache: h.cache,
 		})
 
 	if err != nil {

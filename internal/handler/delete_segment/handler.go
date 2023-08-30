@@ -2,6 +2,7 @@ package delete_segment
 
 import (
 	"errors"
+	"github.com/golovpeter/avito-trainee-task-2023/internal/cache/percent_segments"
 	"github.com/golovpeter/avito-trainee-task-2023/internal/common"
 	"github.com/golovpeter/avito-trainee-task-2023/internal/service/delete_segment"
 	"net/http"
@@ -13,15 +14,18 @@ import (
 type handler struct {
 	log     *logrus.Logger
 	service delete_segment.DeleteSegmentService
+	cache   *percent_segments.Cache
 }
 
 func NewHandler(
 	log *logrus.Logger,
 	service delete_segment.DeleteSegmentService,
+	cache *percent_segments.Cache,
 ) *handler {
 	return &handler{
 		log:     log,
 		service: service,
+		cache:   cache,
 	}
 }
 
@@ -66,7 +70,8 @@ func (h *handler) DeleteSegment(c *gin.Context) {
 	}
 
 	err = h.service.DeleteSegment(&delete_segment.DeleteSegmentData{
-		SegmentSlug: in.SegmentSlug,
+		SegmentSlug:          in.SegmentSlug,
+		PercentSegmentsCache: h.cache,
 	})
 
 	if err != nil {

@@ -3,6 +3,7 @@ package segments
 import (
 	"database/sql"
 	"errors"
+	"github.com/golovpeter/avito-trainee-task-2023/internal/cache/percent_segments"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -24,8 +25,6 @@ const createSegmentQuery = `
 `
 
 func (s *repository) CreateSegment(slug string, percentageUsers int64) error {
-
-	//FIXME: выглядит не очень
 	if percentageUsers == 0 {
 		_, err := s.conn.Exec(createSegmentQuery, slug, nil)
 		return err
@@ -113,7 +112,7 @@ const getPercentSegmentsQuery = `
 	WHERE percentage_users IS NOT NULL AND deleted = false 
 `
 
-func (s *repository) GetPercentSegments() (map[string]Segment, error) {
+func (s *repository) GetPercentSegments() (map[string]percent_segments.Segment, error) {
 	var segments []Segment
 
 	err := s.conn.Select(&segments, getPercentSegmentsQuery)
@@ -121,10 +120,14 @@ func (s *repository) GetPercentSegments() (map[string]Segment, error) {
 		return nil, err
 	}
 
-	percentSegments := make(map[string]Segment)
+	percentSegments := make(map[string]percent_segments.Segment)
 
 	for _, val := range segments {
-		percentSegments[val.Slug] = val
+		percentSegments[val.Slug] = percent_segments.Segment{
+			Id:           val.Id,
+			Slug:         val.Slug,
+			PercentUsers: val.PercentUsers,
+		}
 	}
 
 	return percentSegments, err

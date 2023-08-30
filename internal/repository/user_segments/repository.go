@@ -30,7 +30,6 @@ func (u *repository) ChangeUserSegments(changeData ChangeUserSegmentsData) error
 		insertBuilder := squirrel.Insert("users_to_segments").
 			Columns("user_id", "segment_id", "expired_at", "added_to_segment").PlaceholderFormat(squirrel.Dollar)
 
-		//FIXME: выглядит не очень
 		for _, segmentId := range changeData.AddSegmentsIds {
 			if changeData.ExpiredAt.IsZero() {
 				insertBuilder = insertBuilder.Values(changeData.UserID, segmentId, nil, true)

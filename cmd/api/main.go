@@ -70,7 +70,7 @@ func main() {
 	getPercentService := get_percent_segments.NewService(segmentsRepository)
 
 	createSegmentHandler := create_segment.NewHandler(logger, createSegmentService)
-	deleteSegmentHandler := delete_segment.NewHandler(logger, deleteSegmentService)
+	deleteSegmentHandler := delete_segment.NewHandler(logger, deleteSegmentService, percentSegmentsCache)
 	changeUserSegmentsHandler := change_user_segments.NewHandler(changeUserSegmentsService, logger)
 	getUserSegmentsHandler := get_user_segments.NewHandler(logger, getUserSegmentsService, percentSegmentsCache)
 
@@ -78,7 +78,6 @@ func main() {
 	wg.Add(1)
 	go updatePercentSegmentsCache(getPercentService, percentSegmentsCache, &wg, logger)
 
-	// Ждем первого наполнения кэша сегментов с автоматическим процентом пользователей
 	wg.Wait()
 
 	router := gin.Default()
