@@ -199,6 +199,7 @@ const docTemplate = `{
             ],
             "properties": {
                 "add_segments": {
+                    "description": "required: false\ndescription: AddSegments is an optional parameter.",
                     "type": "array",
                     "items": {
                         "type": "string"
@@ -209,6 +210,7 @@ const docTemplate = `{
                     ]
                 },
                 "delete_segments": {
+                    "description": "required: false\ndescription: DeleteSegments is an optional parameter.",
                     "type": "array",
                     "items": {
                         "type": "string"
@@ -218,6 +220,7 @@ const docTemplate = `{
                     ]
                 },
                 "expired_at": {
+                    "description": "required: false\ndescription: ExpiredAt is an optional parameter.",
                     "type": "string",
                     "example": "2023-08-27T15:40:00Z"
                 },
@@ -243,7 +246,9 @@ const docTemplate = `{
             ],
             "properties": {
                 "percent_users": {
-                    "type": "integer"
+                    "description": "required: false\ndescription: PercentOfUsers is an optional parameter.",
+                    "type": "integer",
+                    "example": 50
                 },
                 "segment_slug": {
                     "type": "string",

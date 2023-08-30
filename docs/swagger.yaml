@@ -3,6 +3,9 @@ definitions:
   change_user_segments.ChangeUserSegmentsIn:
     properties:
       add_segments:
+        description: |-
+          required: false
+          description: AddSegments is an optional parameter.
         example:
         - AVITO_VOICE_MESSAGE
         - AVITO_DICSOUNT_30
@@ -10,12 +13,18 @@ definitions:
           type: string
         type: array
       delete_segments:
+        description: |-
+          required: false
+          description: DeleteSegments is an optional parameter.
         example:
         - AVITO_DICOUNT_50
         items:
           type: string
         type: array
       expired_at:
+        description: |-
+          required: false
+          description: ExpiredAt is an optional parameter.
         example: "2023-08-27T15:40:00Z"
         type: string
       user_id:
@@ -33,6 +42,10 @@ definitions:
   create_segment.CreateSegmentIn:
     properties:
       percent_users:
+        description: |-
+          required: false
+          description: PercentOfUsers is an optional parameter.
+        example: 50
         type: integer
       segment_slug:
         example: AVITO_VOICE_MESSAGE
