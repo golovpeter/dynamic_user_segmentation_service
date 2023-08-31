@@ -72,7 +72,7 @@ EXECUTE PROCEDURE users_to_segments_history_trg();
 
 -- +goose Down
 -- +goose StatementBegin
-DROP TABLE segments;
-DROP TABLE users_to_segments;
 DROP TABLE users_to_segments_history;
+DROP TABLE users_to_segments;
+DROP TABLE segments;
 -- +goose StatementEnd
