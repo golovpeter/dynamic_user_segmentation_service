@@ -120,7 +120,7 @@ docker compose up
    {
      "segments": [
        "AVITO_VOICE_MESSAGE",
-       " AVITO_DISCOUNT_30"
+       "AVITO_DISCOUNT_30"
      ]
    }
    ```
