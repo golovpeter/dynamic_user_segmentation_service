@@ -2,13 +2,14 @@ package delete_segment
 
 import (
 	"errors"
-	"github.com/golovpeter/avito-trainee-task-2023/internal/cache/percent_segments"
-	"github.com/golovpeter/avito-trainee-task-2023/internal/common"
-	"github.com/golovpeter/avito-trainee-task-2023/internal/service/delete_segment"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
+
+	"github.com/golovpeter/avito-trainee-task-2023/internal/cache/percent_segments"
+	"github.com/golovpeter/avito-trainee-task-2023/internal/common"
+	"github.com/golovpeter/avito-trainee-task-2023/internal/service/delete_segment"
 )
 
 type handler struct {

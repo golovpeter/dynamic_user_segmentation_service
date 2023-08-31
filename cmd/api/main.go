@@ -2,14 +2,15 @@ package main
 
 import (
 	"fmt"
+	"sync"
+	"time"
+
 	"github.com/gin-gonic/gin"
 	"github.com/golovpeter/avito-trainee-task-2023/internal/cache/percent_segments"
 	"github.com/golovpeter/avito-trainee-task-2023/internal/service/get_percent_segments"
 	"github.com/sirupsen/logrus"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-	"sync"
-	"time"
 
 	_ "github.com/golovpeter/avito-trainee-task-2023/docs"
 	"github.com/golovpeter/avito-trainee-task-2023/internal/common"
@@ -100,7 +101,6 @@ func updatePercentSegmentsCache(
 	wg *sync.WaitGroup,
 	logger *logrus.Logger,
 ) {
-	// TODO избавиться от дублирующего кода
 	percentSegments, err := getPercentService.GetPercentSegments()
 	if err != nil {
 		logger.WithError(err).Error("error to get percent segments")

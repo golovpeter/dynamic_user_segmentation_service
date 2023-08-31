@@ -2,16 +2,18 @@ package get_user_segments
 
 import (
 	"errors"
+	"net/http"
+	"net/http/httptest"
+	"testing"
+
 	"github.com/gin-gonic/gin"
-	"github.com/golovpeter/avito-trainee-task-2023/internal/cache/percent_segments"
-	"github.com/golovpeter/avito-trainee-task-2023/internal/service/get_user_segments"
 	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"go.uber.org/mock/gomock"
-	"net/http"
-	"net/http/httptest"
-	"testing"
+
+	"github.com/golovpeter/avito-trainee-task-2023/internal/cache/percent_segments"
+	"github.com/golovpeter/avito-trainee-task-2023/internal/service/get_user_segments"
 )
 
 type TestSuite struct {

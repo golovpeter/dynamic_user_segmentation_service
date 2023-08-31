@@ -3,17 +3,19 @@ package change_user_segments
 import (
 	"bytes"
 	"errors"
-	"github.com/gin-gonic/gin"
-	"github.com/golovpeter/avito-trainee-task-2023/internal/service/change_user_segments"
-	"github.com/sirupsen/logrus"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/suite"
-	"go.uber.org/mock/gomock"
 	"io"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/suite"
+	"go.uber.org/mock/gomock"
+
+	"github.com/golovpeter/avito-trainee-task-2023/internal/service/change_user_segments"
 )
 
 type TestSuite struct {

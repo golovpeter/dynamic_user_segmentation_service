@@ -1,16 +1,17 @@
 package main
 
 import (
-	"github.com/golovpeter/avito-trainee-task-2023/internal/common"
-	"github.com/golovpeter/avito-trainee-task-2023/internal/config"
-	"github.com/golovpeter/avito-trainee-task-2023/internal/repository/user_segments"
-	"github.com/golovpeter/avito-trainee-task-2023/internal/service/delete_expired_user_segments"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
 
 	"github.com/sirupsen/logrus"
+
+	"github.com/golovpeter/avito-trainee-task-2023/internal/common"
+	"github.com/golovpeter/avito-trainee-task-2023/internal/config"
+	"github.com/golovpeter/avito-trainee-task-2023/internal/repository/user_segments"
+	"github.com/golovpeter/avito-trainee-task-2023/internal/service/delete_expired_user_segments"
 )
 
 var signalChan = make(chan os.Signal, 1)

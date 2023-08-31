@@ -2,12 +2,14 @@ package get_user_segments
 
 import (
 	"errors"
-	"github.com/golovpeter/avito-trainee-task-2023/internal/repository/user_segments"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"go.uber.org/mock/gomock"
+
+	"github.com/golovpeter/avito-trainee-task-2023/internal/cache/percent_segments"
+	"github.com/golovpeter/avito-trainee-task-2023/internal/repository/user_segments"
 )
 
 type TestSuite struct {
@@ -15,17 +17,21 @@ type TestSuite struct {
 
 	ctrl *gomock.Controller
 
-	mockSegmentsRepository *user_segments.MockRepository
+	mockUserSegmentsRepository *user_segments.MockRepository
 
 	service GetUserSegmentsService
+
+	cache *percent_segments.Cache
 }
 
 func (ts *TestSuite) SetupTest() {
 	ts.ctrl = gomock.NewController(ts.T())
 
-	ts.mockSegmentsRepository = user_segments.NewMockRepository(ts.ctrl)
+	ts.mockUserSegmentsRepository = user_segments.NewMockRepository(ts.ctrl)
 
-	ts.service = NewService(ts.mockSegmentsRepository)
+	ts.service = NewService(ts.mockUserSegmentsRepository)
+
+	ts.cache = percent_segments.NewCache()
 }
 
 func TestRunSuite(t *testing.T) {
@@ -34,16 +40,29 @@ func TestRunSuite(t *testing.T) {
 
 const testUserId int64 = 123
 
-var testUserSegments = []string{"AVITO_MESSENGER, AVITO_PAY"}
+var testUserSegments = []string{"AVITO_MESSENGER", "AVITO_PAY"}
+var testMapSegments = map[string]user_segments.SegmentInfo{
+	testUserSegments[0]: {
+		Slug:           testUserSegments[0],
+		ID:             1,
+		AddedToSegment: true,
+	},
+	testUserSegments[1]: {
+		Slug:           testUserSegments[1],
+		ID:             2,
+		AddedToSegment: true,
+	},
+}
 
 func (ts *TestSuite) Test_GetUserSegments_Success() {
-	ts.mockSegmentsRepository.EXPECT().
+	ts.mockUserSegmentsRepository.EXPECT().
 		GetUserSegments(testUserId).
 		Times(1).
-		Return(testUserSegments, nil)
+		Return(testMapSegments, nil)
 
 	userSegments, err := ts.service.GetUserSegments(&GetUserSegmentsData{
-		UserId: testUserId,
+		UserId:               testUserId,
+		PercentSegmentsCache: ts.cache,
 	})
 
 	assert.NoError(ts.T(), err)
@@ -51,7 +70,7 @@ func (ts *TestSuite) Test_GetUserSegments_Success() {
 }
 
 func (ts *TestSuite) Test_GetUserSegments_Error_Repository() {
-	ts.mockSegmentsRepository.EXPECT().
+	ts.mockUserSegmentsRepository.EXPECT().
 		GetUserSegments(testUserId).
 		Times(1).
 		Return(nil, errors.New("repository error"))

@@ -3,17 +3,19 @@ package delete_segment
 import (
 	"bytes"
 	"errors"
-	"github.com/gin-gonic/gin"
-	"github.com/golovpeter/avito-trainee-task-2023/internal/cache/percent_segments"
-	delete_segment_service "github.com/golovpeter/avito-trainee-task-2023/internal/service/delete_segment"
-	"github.com/sirupsen/logrus"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/suite"
-	"go.uber.org/mock/gomock"
 	"io"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/suite"
+	"go.uber.org/mock/gomock"
+
+	"github.com/golovpeter/avito-trainee-task-2023/internal/cache/percent_segments"
+	delete_segment_service "github.com/golovpeter/avito-trainee-task-2023/internal/service/delete_segment"
 )
 
 type TestSuite struct {

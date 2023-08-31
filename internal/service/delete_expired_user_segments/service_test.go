@@ -2,12 +2,13 @@ package delete_expired_user_segments
 
 import (
 	"errors"
-	"github.com/golovpeter/avito-trainee-task-2023/internal/repository/user_segments"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"go.uber.org/mock/gomock"
+
+	"github.com/golovpeter/avito-trainee-task-2023/internal/repository/user_segments"
 )
 
 type TestSuite struct {

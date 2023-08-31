@@ -3,16 +3,18 @@ package create_segment
 import (
 	"bytes"
 	"errors"
-	"github.com/gin-gonic/gin"
-	create_segment_service "github.com/golovpeter/avito-trainee-task-2023/internal/service/create_segment"
-	"github.com/sirupsen/logrus"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/suite"
-	"go.uber.org/mock/gomock"
 	"io"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/suite"
+	"go.uber.org/mock/gomock"
+
+	create_segment_service "github.com/golovpeter/avito-trainee-task-2023/internal/service/create_segment"
 )
 
 type TestSuite struct {

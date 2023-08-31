@@ -4,9 +4,10 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
+
 	"github.com/golovpeter/avito-trainee-task-2023/internal/common"
 	"github.com/golovpeter/avito-trainee-task-2023/internal/service/change_user_segments"
-	"github.com/sirupsen/logrus"
 )
 
 type handler struct {

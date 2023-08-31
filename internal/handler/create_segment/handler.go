@@ -1,11 +1,13 @@
 package create_segment
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
+
 	"github.com/golovpeter/avito-trainee-task-2023/internal/common"
 	"github.com/golovpeter/avito-trainee-task-2023/internal/service/create_segment"
-	"github.com/sirupsen/logrus"
-	"net/http"
 )
 
 type handler struct {

@@ -4,11 +4,12 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/golovpeter/avito-trainee-task-2023/internal/cache/percent_segments"
-	"github.com/golovpeter/avito-trainee-task-2023/internal/repository/segments"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"go.uber.org/mock/gomock"
+
+	"github.com/golovpeter/avito-trainee-task-2023/internal/cache/percent_segments"
+	"github.com/golovpeter/avito-trainee-task-2023/internal/repository/segments"
 )
 
 type TestSuite struct {
@@ -54,7 +55,7 @@ func (ts *TestSuite) Test_GetPercentSegments_Success() {
 		Times(1).
 		Return(testPercentSegments, nil)
 
-	percentSegments, err := ts.mockSegmentsRepository.GetPercentSegments()
+	percentSegments, err := ts.service.GetPercentSegments()
 
 	assert.NoError(ts.T(), err)
 	assert.Equal(ts.T(), testPercentSegments, percentSegments)
@@ -68,7 +69,7 @@ func (ts *TestSuite) Test_GetPercentSegments_RepositoryError() {
 		Times(1).
 		Return(nil, errors.New("repository error"))
 
-	percentSegments, err := ts.mockSegmentsRepository.GetPercentSegments()
+	percentSegments, err := ts.service.GetPercentSegments()
 
 	assert.Error(ts.T(), err)
 	assert.Equal(ts.T(), testEmptyPercentSegments, percentSegments)

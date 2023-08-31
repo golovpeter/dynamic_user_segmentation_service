@@ -1,14 +1,15 @@
 package get_user_segments
 
 import (
-	"github.com/golovpeter/avito-trainee-task-2023/internal/cache/percent_segments"
 	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
+
+	"github.com/golovpeter/avito-trainee-task-2023/internal/cache/percent_segments"
 	"github.com/golovpeter/avito-trainee-task-2023/internal/common"
 	"github.com/golovpeter/avito-trainee-task-2023/internal/service/get_user_segments"
-	"github.com/sirupsen/logrus"
 )
 
 type handler struct {

@@ -3,8 +3,10 @@ package segments
 import (
 	"database/sql"
 	"errors"
-	"github.com/golovpeter/avito-trainee-task-2023/internal/cache/percent_segments"
+
 	"github.com/jmoiron/sqlx"
+
+	"github.com/golovpeter/avito-trainee-task-2023/internal/cache/percent_segments"
 )
 
 type repository struct {

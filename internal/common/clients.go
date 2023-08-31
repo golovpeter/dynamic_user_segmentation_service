@@ -3,9 +3,10 @@ package common
 import (
 	"fmt"
 
-	"github.com/golovpeter/avito-trainee-task-2023/internal/config"
 	_ "github.com/jackc/pgx/v5/stdlib"
 	"github.com/jmoiron/sqlx"
+
+	"github.com/golovpeter/avito-trainee-task-2023/internal/config"
 )
 
 func CreateDbClient(cfg config.DatabaseConfig) (*sqlx.DB, error) {
