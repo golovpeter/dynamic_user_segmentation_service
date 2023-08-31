@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS segments
     deleted          BOOLEAN                  NOT NULL DEFAULT FALSE,
     created_at       TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
     updated_at       TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
-    );
+);
 
 CREATE INDEX IF NOT EXISTS segments_search_by_slug_and_deleted_idx
     ON segments (slug, deleted)
@@ -19,9 +19,9 @@ CREATE TABLE IF NOT EXISTS users_to_segments
     user_id          BIGINT NOT NULL,
     segment_id       BIGINT NOT NULL REFERENCES segments (id),
     expired_at       TIMESTAMP WITH TIME ZONE,
-                                   added_to_segment BOOL   NOT NULL,
-                                   CONSTRAINT unique_user_segment UNIQUE (user_id, segment_id)
-    );
+    added_to_segment BOOL   NOT NULL,
+    CONSTRAINT unique_user_segment UNIQUE (user_id, segment_id)
+);
 
 CREATE INDEX IF NOT EXISTS users_to_segments_expired_at_idx
     ON users_to_segments (expired_at) WHERE expired_at is not null;
@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS users_to_segments_history
     segment_id BIGINT                   NOT NULL REFERENCES segments (id),
     operation  operation                NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
-    );
+);
 
 CREATE INDEX IF NOT EXISTS users_to_segments_history_created_at_idx
     ON users_to_segments_history (created_at);
