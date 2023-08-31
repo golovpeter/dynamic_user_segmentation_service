@@ -43,7 +43,7 @@ func TestRunSuite(t *testing.T) {
 	suite.Run(t, new(TestSuite))
 }
 
-var (
+const (
 	testSuccessRequest = `
 {
 	"segment_slug": "AVITO_VOICE_MESSAGE",

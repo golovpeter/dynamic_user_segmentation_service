@@ -44,7 +44,7 @@ func TestRunSuite(t *testing.T) {
 	suite.Run(t, new(TestSuite))
 }
 
-var (
+const (
 	testRequestSuccess = `
 {
     "add_segments": [

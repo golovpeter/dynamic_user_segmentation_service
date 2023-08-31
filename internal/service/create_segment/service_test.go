@@ -33,9 +33,11 @@ func TestRunSuite(t *testing.T) {
 	suite.Run(t, new(TestSuite))
 }
 
-const testSlug = "AVITO_MESSENGER"
-const testPercentUsers int64 = 50
-const testZeroPercentage int64 = 0
+const (
+	testSlug                 = "AVITO_MESSENGER"
+	testPercentUsers   int64 = 50
+	testZeroPercentage int64 = 0
+)
 
 func (ts *TestSuite) Test_CreateSegment_Success() {
 	ts.mockSegmentsRepository.EXPECT().

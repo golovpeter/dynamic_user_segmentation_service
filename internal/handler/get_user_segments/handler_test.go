@@ -46,7 +46,7 @@ func TestRunSuite(t *testing.T) {
 	suite.Run(t, new(TestSuite))
 }
 
-var (
+const (
 	testUserId        int64  = 1000
 	testInvalidUserId string = "invalidUserId"
 )

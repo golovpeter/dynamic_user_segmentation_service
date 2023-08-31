@@ -40,19 +40,22 @@ func TestRunSuite(t *testing.T) {
 
 const testUserId int64 = 123
 
-var testUserSegments = []string{"AVITO_MESSENGER", "AVITO_PAY"}
-var testMapSegments = map[string]user_segments.SegmentInfo{
-	testUserSegments[0]: {
-		Slug:           testUserSegments[0],
-		ID:             1,
-		AddedToSegment: true,
-	},
-	testUserSegments[1]: {
-		Slug:           testUserSegments[1],
-		ID:             2,
-		AddedToSegment: true,
-	},
-}
+var (
+	testUserSegments = []string{"AVITO_MESSENGER", "AVITO_PAY"}
+
+	testMapSegments = map[string]user_segments.SegmentInfo{
+		testUserSegments[0]: {
+			Slug:           testUserSegments[0],
+			ID:             1,
+			AddedToSegment: true,
+		},
+		testUserSegments[1]: {
+			Slug:           testUserSegments[1],
+			ID:             2,
+			AddedToSegment: true,
+		},
+	}
+)
 
 func (ts *TestSuite) Test_GetUserSegments_Success() {
 	ts.mockUserSegmentsRepository.EXPECT().
