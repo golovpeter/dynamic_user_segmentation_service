@@ -28,29 +28,43 @@ docker compose up
 1. **Метод создания сегмента. Принимает slug (название) сегмента, и опционально процент пользователей, который
    обязательно попадут в этот сегмент.**
 
-```bash
-curl -X POST \
--H "Content-Type: application/json" \
--d '{
-         "segment_slug": "AVITO_VOICE_MESSAGE"
-         "percent_users": 50
-}' \
-http://localhost:8080/v1/segment/create
-```
+   **Пример запроса:**
+   ```bash
+   curl -X POST \
+   -H "Content-Type: application/json" \
+   -d '{
+            "segment_slug": "AVITO_VOICE_MESSAGE"
+            "percent_users": 50
+   }' \
+   http://localhost:8080/v1/segment/create
+   ``` 
+
+   **Пример ответа:**
+
+   ```
+   200 OK
+   ```
 
 ---
 
 2. **Метод удаления сегмента. Принимает slug(название) сегмента. После удаления сегмента все пользователи с этим
    сегментом также удаляются.**
 
-```bash
-curl -X POST \
--H "Content-Type: application/json" \
--d '{
-    "segment_slug": "AVITO_VOICE_MESSAGE"
-}' \
-http://localhost:8080/v1/segment/delete
-```
+   **Пример запроса:**
+   ```bash
+   curl -X POST \
+   -H "Content-Type: application/json" \
+   -d '{
+       "segment_slug": "AVITO_VOICE_MESSAGE"
+   }' \
+   http://localhost:8080/v1/segment/delete
+   ```
+
+   **Пример ответа:**
+
+   ```
+   200 OK
+   ```
 
 ---
 
@@ -58,39 +72,59 @@ http://localhost:8080/v1/segment/delete
    пользователю, список slug (названий) сегментов которые нужно удалить у пользователя, id пользователя. Опционально
    принимает время, через которое нужно удалить пользователя из сегментов, в которые его добавляют.**
 
-```bash
-curl -X POST \
--H "Content-Type: application/json" \
--d '{
-    "add_segments": [
-        "AVITO_VOICE_MESSAGE"
-    ],
-    "delete_segments": [
-        "AVITO_DISCOUNT_30"
-    ],
-    "user_id": 1003,
-    "expired_at": "2023-09-22T23:41:00Z"
-}' \
-http://localhost:8080/v1/segment/changeForUser
-```
+   **Пример запроса:**
+   ```bash
+   curl -X POST \
+   -H "Content-Type: application/json" \
+   -d '{
+       "add_segments": [
+           "AVITO_VOICE_MESSAGE"
+       ],
+       "delete_segments": [
+           "AVITO_DISCOUNT_30"
+       ],
+       "user_id": 1003,
+       "expired_at": "2023-09-22T23:41:00Z"
+   }' \
+   http://localhost:8080/v1/segment/changeForUser
+   ```
 
-**Решение по валидации:**
+   **Пример ответа:**
+   ```
+     200 OK
+   ```
 
-- **Если добавляемые и удаляемые сегменты имеют пересечение - возвращается ответ с кодом 400, и список пересекающихся
-  сегментов**
-
-- **Если какой-либо сегмент не найден в одном из списков - возвращается ответ с кодом 400, и список с ненайденнными
-  сегментами**
+   **Решение по валидации:**
+   
+   - **Если добавляемые и удаляемые сегменты имеют пересечение - возвращается ответ с кодом 400, и список пересекающихся
+     сегментов**
+   
+   - **Если какой-либо сегмент не найден в одном из списков - возвращается ответ с кодом 400, и список с ненайденнными
+     сегментами**
 
 ---
 
 4. **Метод получения активных сегментов пользователя. Принимает на вход id пользователя.**
 
-```bash
-curl -X GET \
-http://localhost:8080/v1/segments/user/1000 \
--H "accept: application/json" 
-```
+   **Пример запроса:**
+
+   ```bash
+   curl -X GET \
+   http://localhost:8080/v1/segments/user/1000 \
+   -H "accept: application/json" 
+   ```
+
+   **Пример ответа:**
+
+   ```json
+   {
+     "segments": [
+       "AVITO_VOICE_MESSAGE",
+       " AVITO_DISCOUNT_30"
+     ]
+   }
+   ```
+
 
 ## Дополнительные задания:
 
