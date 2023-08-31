@@ -34,15 +34,32 @@ func TestRunSuite(t *testing.T) {
 }
 
 const testSlug = "AVITO_MESSENGER"
+const testPercentUsers int64 = 50
+const testZeroPercentage int64 = 0
 
 func (ts *TestSuite) Test_CreateSegment_Success() {
 	ts.mockSegmentsRepository.EXPECT().
-		CreateSegment(testSlug).
+		CreateSegment(testSlug, testPercentUsers).
 		Times(1).
 		Return(nil)
 
 	err := ts.service.CreateSegment(&CreateSegmentData{
-		SegmentSlug: testSlug,
+		SegmentSlug:    testSlug,
+		PercentOfUsers: testPercentUsers,
+	})
+
+	assert.NoError(ts.T(), err)
+}
+
+func (ts *TestSuite) Test_CreateSegment_WithoutPercentage_Success() {
+	ts.mockSegmentsRepository.EXPECT().
+		CreateSegment(testSlug, testZeroPercentage).
+		Times(1).
+		Return(nil)
+
+	err := ts.service.CreateSegment(&CreateSegmentData{
+		SegmentSlug:    testSlug,
+		PercentOfUsers: testZeroPercentage,
 	})
 
 	assert.NoError(ts.T(), err)
@@ -50,12 +67,13 @@ func (ts *TestSuite) Test_CreateSegment_Success() {
 
 func (ts *TestSuite) Test_CreateSegment_RepositoryError() {
 	ts.mockSegmentsRepository.EXPECT().
-		CreateSegment(testSlug).
+		CreateSegment(testSlug, testPercentUsers).
 		Times(1).
 		Return(errors.New("repository error"))
 
 	err := ts.service.CreateSegment(&CreateSegmentData{
-		SegmentSlug: testSlug,
+		SegmentSlug:    testSlug,
+		PercentOfUsers: testPercentUsers,
 	})
 
 	assert.Error(ts.T(), err)

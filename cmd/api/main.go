@@ -71,7 +71,7 @@ func main() {
 
 	createSegmentHandler := create_segment.NewHandler(logger, createSegmentService)
 	deleteSegmentHandler := delete_segment.NewHandler(logger, deleteSegmentService, percentSegmentsCache)
-	changeUserSegmentsHandler := change_user_segments.NewHandler(changeUserSegmentsService, logger)
+	changeUserSegmentsHandler := change_user_segments.NewHandler(logger, changeUserSegmentsService)
 	getUserSegmentsHandler := get_user_segments.NewHandler(logger, getUserSegmentsService, percentSegmentsCache)
 
 	wg := sync.WaitGroup{}

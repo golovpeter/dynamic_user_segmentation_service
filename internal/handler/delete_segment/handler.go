@@ -56,7 +56,7 @@ func (h *handler) DeleteSegment(c *gin.Context) {
 	if err != nil {
 		h.log.WithError(err).Error(err.Error())
 		c.JSON(http.StatusInternalServerError, common.ErrorOut{
-			ErrorMessage: err.Error(),
+			ErrorMessage: "failed parse regexp",
 		})
 		return
 	}

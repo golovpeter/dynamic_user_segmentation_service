@@ -9,8 +9,8 @@ import (
 )
 
 type handler struct {
-	service create_segment.CreateSegmentService
 	log     *logrus.Logger
+	service create_segment.CreateSegmentService
 }
 
 func NewHandler(
@@ -50,7 +50,7 @@ func (h *handler) CreateSegment(c *gin.Context) {
 	if err != nil {
 		h.log.WithError(err).Error(err.Error())
 		c.JSON(http.StatusInternalServerError, common.ErrorOut{
-			ErrorMessage: err.Error(),
+			ErrorMessage: "failed parse regexp",
 		})
 		return
 	}

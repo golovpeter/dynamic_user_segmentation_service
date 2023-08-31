@@ -10,13 +10,13 @@ import (
 )
 
 type handler struct {
-	service change_user_segments.ChangeUserSegmentsService
 	log     *logrus.Logger
+	service change_user_segments.ChangeUserSegmentsService
 }
 
 func NewHandler(
-	service change_user_segments.ChangeUserSegmentsService,
 	log *logrus.Logger,
+	service change_user_segments.ChangeUserSegmentsService,
 ) *handler {
 	return &handler{
 		service: service,

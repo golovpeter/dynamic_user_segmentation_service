@@ -7,6 +7,7 @@ package segments
 import (
 	reflect "reflect"
 
+	percent_segments "github.com/golovpeter/avito-trainee-task-2023/internal/cache/percent_segments"
 	gomock "go.uber.org/mock/gomock"
 )
 
@@ -78,10 +79,10 @@ func (mr *MockRepositoryMockRecorder) GetActiveSegmentsIdsBySlugs(slugs interfac
 }
 
 // GetPercentSegments mocks base method.
-func (m *MockRepository) GetPercentSegments() (map[string]Segment, error) {
+func (m *MockRepository) GetPercentSegments() (map[string]percent_segments.Segment, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetPercentSegments")
-	ret0, _ := ret[0].(map[string]Segment)
+	ret0, _ := ret[0].(map[string]percent_segments.Segment)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

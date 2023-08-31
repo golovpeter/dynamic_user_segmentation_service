@@ -2,6 +2,7 @@ package delete_segment
 
 import (
 	"errors"
+	"github.com/golovpeter/avito-trainee-task-2023/internal/cache/percent_segments"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -42,7 +43,8 @@ func (ts *TestSuite) Test_DeleteSegment_Success() {
 		Return(true, nil)
 
 	err := ts.service.DeleteSegment(&DeleteSegmentData{
-		SegmentSlug: testSlug,
+		SegmentSlug:          testSlug,
+		PercentSegmentsCache: percent_segments.NewCache(),
 	})
 
 	assert.NoError(ts.T(), err)
