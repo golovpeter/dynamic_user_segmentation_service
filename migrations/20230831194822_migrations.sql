@@ -1,3 +1,5 @@
+-- +goose Up
+-- +goose StatementBegin
 CREATE TABLE IF NOT EXISTS segments
 (
     id               BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -6,7 +8,7 @@ CREATE TABLE IF NOT EXISTS segments
     deleted          BOOLEAN                  NOT NULL DEFAULT FALSE,
     created_at       TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
     updated_at       TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
-);
+    );
 
 CREATE INDEX IF NOT EXISTS segments_search_by_slug_and_deleted_idx
     ON segments (slug, deleted)
@@ -17,9 +19,9 @@ CREATE TABLE IF NOT EXISTS users_to_segments
     user_id          BIGINT NOT NULL,
     segment_id       BIGINT NOT NULL REFERENCES segments (id),
     expired_at       TIMESTAMP WITH TIME ZONE,
-    added_to_segment BOOL   NOT NULL,
-    CONSTRAINT unique_user_segment UNIQUE (user_id, segment_id)
-);
+                                   added_to_segment BOOL   NOT NULL,
+                                   CONSTRAINT unique_user_segment UNIQUE (user_id, segment_id)
+    );
 
 CREATE INDEX IF NOT EXISTS users_to_segments_expired_at_idx
     ON users_to_segments (expired_at) WHERE expired_at is not null;
@@ -37,7 +39,7 @@ CREATE TABLE IF NOT EXISTS users_to_segments_history
     segment_id BIGINT                   NOT NULL REFERENCES segments (id),
     operation  operation                NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
-);
+    );
 
 CREATE INDEX IF NOT EXISTS users_to_segments_history_created_at_idx
     ON users_to_segments_history (created_at);
@@ -56,13 +58,21 @@ BEGIN
     THEN
         INSERT INTO users_to_segments_history (user_id, segment_id, operation)
         VALUES (OLD.user_id, OLD.segment_id, 'delete');
-    END IF;
-    RETURN NEW;
+END IF;
+RETURN NEW;
 END;
 $BODY$;
 
 CREATE OR REPLACE TRIGGER users_to_segments_history_created_at_idx
     AFTER INSERT OR DELETE
-    ON users_to_segments
+ON users_to_segments
     FOR EACH ROW
 EXECUTE PROCEDURE users_to_segments_history_trg();
+-- +goose StatementEnd
+
+-- +goose Down
+-- +goose StatementBegin
+DROP TABLE segments;
+DROP TABLE users_to_segments;
+DROP TABLE users_to_segments_history;
+-- +goose StatementEnd
